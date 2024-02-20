@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TFlex.DOCs.Model;
 using TFlex.DOCs.Model.Classes;
+using TFlex.DOCs.Model.Desktop;
 using TFlex.DOCs.Model.FilePreview.CADService;
 using TFlex.DOCs.Model.FilePreview.CADService.TFlexCadDocument;
 using TFlex.DOCs.Model.Macros;
@@ -15,6 +16,8 @@ using TFlex.DOCs.Model.References;
 using TFlex.DOCs.Model.References.Documents;
 using TFlex.DOCs.Model.References.Files;
 using TFlex.DOCs.Model.References.Nomenclature;
+using TFlex.DOCs.Model.Structure;
+using TFlex.DOCs.Resources.Strings;
 
 namespace ExportFiles
 {
@@ -25,6 +28,9 @@ namespace ExportFiles
         private string _extensionDoc = "tif";
         private int _resolution = 300;
         private bool _exportToNewFile = true;
+        /// <summary> Параметр код назначения </summary>
+        private ParameterInfo _codeParameter;
+        private string _selectedCodeName = "Подлинник";
 
         private ServerConnection connection;
         DocumentReference documentReference;
@@ -42,7 +48,6 @@ namespace ExportFiles
         {
             this.connection = connection;
             this.documentReference = new DocumentReference(connection);
-            this.classObjectProductComposition = documentReference.Classes.Find(Guids.DocumentsReference.Classes.objectProductComposition);
             this.provider = CadDocumentProvider.Connect(connection, ".grb");
         }
 
@@ -51,7 +56,7 @@ namespace ExportFiles
         /// Задать файл
         /// </summary>
         /// <param name="file"></param>
-        private void SetFileObject(FileObject file)
+        public void SetFileObject(FileObject file)
         {
             fileObject = file;
         }
@@ -60,7 +65,7 @@ namespace ExportFiles
         /// Задать номенклатуру
         /// </summary>
         /// <param name="nomenclature"></param>
-        private void SetNomenclature(NomenclatureObject nomenclature)
+        public void SetNomenclature(NomenclatureObject nomenclature)
         {
             this.nomenclature = nomenclature;
         }
@@ -71,8 +76,9 @@ namespace ExportFiles
         /// <param name="fileObject">файл grb</param>
         /// <param name="isNewFile">создать новый подлинник</param>
         /// <returns>новый подлинник</returns>
-        private FileObject ExportToFormat(bool isNewFile)
+        public FileObject ExportToFormat(bool isNewFile)
         {
+            FileObject uploadedFile = null;
             if (fileObject == null)
             {
                 return null;
@@ -117,7 +123,7 @@ namespace ExportFiles
             {
                 ClearTemp();
             }
-            
+            return uploadedFile;
         }
 
         /// <summary>
@@ -139,15 +145,6 @@ namespace ExportFiles
                 if (document == null)
                     throw new MacroException(String.Format("Файл '{0}' не может быть открыт", tempGrbFileName));
 
-                //получаем переменные документа CAD
-                var varribles = document.GetVariables();
-
-                //Записываем в переменные данные о подписях объекта
-                SetSignaturesVarribles(fileObject.Signatures, varribles);
-                SetBaseInfoVariables(varribles, fileObject, nomenclature as NomenclatureObject);
-                //Сохраняем коллекцию переменных
-                varribles.Save();
-
                 // Экспортируем документ в другой формат на основе контекста настройки
                 // Получаем полный путь до экспортированного файла, для дальнейшей проверки экспорта
                 var path = document.Export(exportContext);
@@ -167,6 +164,129 @@ namespace ExportFiles
         }
 
         /// <summary>
+        /// Загрузить экспортированный файл на сервер
+        /// </summary>
+        /// <param name="tempFilePath">Относительный путь к временному файлу</param>
+        /// <param name="parentFolderPath">Относительный путь к родительской папке</param>
+        /// <param name="grbFileObject">Объект grb файла</param>
+        /// <param name="fileName">Имя, с которым файл будет сохранен в справочник</param>
+        /// <returns>Созданный файл</returns>
+        private FileObject UploadExportFile(string tempFilePath, string parentFolderPath, FileObject grbFileObject, string fileName)
+        {
+            try
+            {
+                var fileReference = new FileReference(connection)
+                {
+                    LoadSettings = { LoadDeleted = true }
+                };
+
+                var parentFolder = (TFlex.DOCs.Model.References.Files.FolderObject)fileReference.FindByRelativePath(parentFolderPath);
+                if (parentFolder == null)
+                    throw new MacroException(String.Format("Не найдена родительская папка с именем '{0}'", parentFolderPath));
+                parentFolder.Children.Load();
+
+                var uploadingFileName = String.Format("{0}.{1}", fileName, _extensionDoc);
+
+                var exportedFile = parentFolder.Children.AsList
+                    .FirstOrDefault(child => child.IsFile && child.Name.Value == uploadingFileName) as FileObject;
+
+                if (exportedFile is null)
+                {
+                    var fileType = GetFileType(fileReference);
+                    exportedFile = parentFolder.CreateFile(
+                        tempFilePath,
+                        String.Empty,
+                        uploadingFileName,
+                        fileType);
+                }
+                else
+                {
+                    if (_exportToNewFile)
+                    {
+                        var fileType = GetFileType(fileReference);
+                        exportedFile = parentFolder.CreateFile(
+                            tempFilePath,
+                            String.Empty,
+                            GetUniqueExportedFileName(uploadingFileName, parentFolder, fileName),
+                            fileType);
+                    }
+                    else
+                    {
+                        if (!exportedFile.IsCheckedOutByCurrentUser)
+                            Desktop.CheckOut(exportedFile, false);
+
+                        File.Copy(tempFilePath, exportedFile.LocalPath, true);
+                    }
+                }
+
+                exportedFile.BeginChanges();
+                SetCodeParameter(exportedFile);
+                AddDocument(grbFileObject, exportedFile);
+                exportedFile.EndChanges();
+                AddFileToChange(grbFileObject, exportedFile);
+                Desktop.CheckIn(exportedFile, String.Format(
+                    "Экспорт файла:{0}'{1}'{0}в формат '{3}':{0}'{2}'",
+                    Environment.NewLine, grbFileObject.Path, exportedFile.Path, _extensionDoc), false);
+                return exportedFile;
+            }
+            catch (SystemException e)
+            {
+                string exceptionMessage = String.Format(
+                    "Ошибка загрузки файла на сервер.{0}" +
+                    "При операции загрузки файла на сервер произошли следующие ошибки:{0}{1}",
+                    Environment.NewLine, e.Message);
+                throw new MacroException(exceptionMessage, e);
+            }
+        }
+
+        /// <summary>
+        /// Установка кода назначения файла
+        /// </summary>
+        /// <param name="exportedFile"></param>
+        private void SetCodeParameter(FileObject exportedFile)
+        {
+            if (_codeParameter != null)
+            {
+                int codeValue = (int)_codeParameter.ValueList.GetValue(_selectedCodeName);
+                exportedFile.Code.Value = codeValue;
+            }
+        }
+
+        /// <summary>
+        /// Подключение подлинника к документу
+        /// </summary>
+        /// <param name="grbFileObject"></param>
+        /// <param name="exportedFile"></param>
+        private void AddDocument(FileObject grbFileObject, FileObject exportedFile)
+        {
+            var masterObject = grbFileObject.MasterObject;
+            if (masterObject is EngineeringDocumentObject documentObject)
+            {
+                if (!exportedFile.Links.ToMany[EngineeringDocumentFields.File]
+                    .Objects
+                    .Any(document => document.SystemFields.Guid == documentObject.SystemFields.Guid))
+                {
+                    exportedFile.AddLinkedObject(EngineeringDocumentFields.File, documentObject);
+                }
+            }
+        }
+
+        private void AddFileToChange(FileObject grbFileObject, FileObject exportedFile)
+        {
+            var masterObject = grbFileObject.MasterObject;
+            if (masterObject != null && masterObject.Reference.ParameterGroup.Guid == Guids.ChangeReference.Изменения)
+            {
+                if (!masterObject.Links.ToMany[Guids.ChangeReference.Links.ИзмененияРабочиеФайлы]
+                    .Objects
+                    .Any(workingFile => workingFile.SystemFields.Guid == exportedFile.SystemFields.Guid))
+                {
+                    masterObject.BeginChanges();
+                    masterObject.AddLinkedObject(Guids.ChangeReference.Links.ИзмененияРабочиеФайлы, exportedFile);
+                    masterObject.EndChanges();
+                }
+            }
+        }
+        /// <summary>
         /// Удаление временной папки
         /// </summary>
         private void ClearTemp()
@@ -176,6 +296,18 @@ namespace ExportFiles
                 foreach (string filePath in Directory.GetFiles(_tempFolder))
                     DeleteFile(filePath);
             }
+        }
+
+        private FileType GetFileType(FileReference fileReference)
+        {
+            var fileType = fileReference.Classes.GetFileTypeByExtension(_extensionDoc);
+            if (fileType is null)
+            {
+                string typeName = String.Format(Texts.FileNameWithExtension, _extensionDoc.ToUpper());
+                fileType = fileReference.Classes.CreateFileType(typeName, String.Empty, _extensionDoc);
+            }
+
+            return fileType;
         }
 
         /// <summary>
@@ -203,6 +335,26 @@ namespace ExportFiles
         private FileAttributes RemoveAttribute(FileAttributes attributes, FileAttributes attributesToRemove)
         {
             return attributes & ~attributesToRemove;
+        }
+
+        private string GetUniqueExportedFileName(string exportedFileName, TFlex.DOCs.Model.References.Files.FolderObject parentFolder, string fileName)
+        {
+            var filesName = parentFolder.Children.AsList
+                .Where(child => child.IsFile)
+                .Select(file => file.Name.Value)
+                .ToArray();
+
+            var filesNameSet = new HashSet<string>(filesName);
+
+            var counter = 1;
+
+            while (filesNameSet.Contains(exportedFileName))
+            {
+                exportedFileName = String.Format("{0}_{1}.{2}", fileName, counter, _extensionDoc);
+                counter++;
+            }
+
+            return exportedFileName;
         }
 
         /// <summary>

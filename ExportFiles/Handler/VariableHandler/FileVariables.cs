@@ -103,10 +103,10 @@ namespace ExportFiles.Handler
             {
                 return;
             }
-            if (!document.Class.IsInherit(_classObjectStructProduct))
-            {
-                return;
-            }
+            //if (!document.Class.IsInherit(_classObjectStructProduct))
+            //{
+            //    return;
+            //}
             if (document.Class.Guid.Equals(new Guid("582dad76-1b07-4c4b-b97d-cc89b0149aa6")) ||
                 document.Class.Guid.Equals(new Guid("83e1ef55-0658-4e3e-afeb-d8fceee3c86d")) ||
                 document.Class.Guid.Equals(new Guid("0d6ff46a-e8a1-4485-98cd-0955a1b54a4d"))
@@ -114,13 +114,13 @@ namespace ExportFiles.Handler
             {
                 return;
             }
-            var material = document.GetObject(Guids.Links.ОсновнойМатериал);
-            if (material is null)
-            {
-                return;
-            }
-            var materialName = material[Guids.Parameters.НазваниеОписаниеМатериала].GetString();
-            TrySetVarribleValue(variables, "$Материал2", materialName);
+            //var material = document.GetObject(Guids.Links.ОсновнойМатериал);
+            //if (material is null)
+            //{
+            //    return;
+            //}
+            //var materialName = material[Guids.Parameters.НазваниеОписаниеМатериала].GetString();
+            //TrySetVarribleValue(variables, "$Материал2", materialName);
         }
 
 
