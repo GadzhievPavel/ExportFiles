@@ -1,10 +1,12 @@
-﻿using System;
+﻿using DeveloperUtilsLibrary;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TFlex.DOCs.Model;
 using TFlex.DOCs.Model.Classes;
+using TFlex.DOCs.Model.References;
 using TFlex.DOCs.Model.References.Documents;
 using TFlex.DOCs.Model.References.Files;
 using TFlex.DOCs.Model.References.Nomenclature;
@@ -44,7 +46,9 @@ namespace ExportFiles
         /// <param name="nomenclatures">список экспортируемой номенклатуры</param>
         /// <param name="types">разрешенные для конвертации типы</param>
         /// <param name="connection">соединение сервера</param>
-        /// 
+        ///
+
+        private StageController stageController;
         public NomenclatureExport(List<NomenclatureObject> nomenclatures, HashSet<NomenclatureType> types, ServerConnection connection)
         {
             this.nomenclatureReference = new NomenclatureReference(connection);
@@ -57,6 +61,7 @@ namespace ExportFiles
                 AddNomenclature(nom);
             }
             this.export = new ExportFilesGrbToTif(connection);
+            this.stageController = new StageController(connection);
         }
 
         public NomenclatureExport(ServerConnection connection)
@@ -67,6 +72,7 @@ namespace ExportFiles
             //this.nomenclatures = new HashSet<NomenclatureObject> { };
             this.export = new ExportFilesGrbToTif(connection);
             //files = new HashSet<FileObject>();
+            this.stageController = new StageController(connection);
         }
 
 
@@ -166,7 +172,35 @@ namespace ExportFiles
         /// <param name="sourceFile"></param>
         private void addAllLinkedNomenclature(FileObject newFile, FileObject sourceFile)
         {
-            //to do
+            var list = sourceFile.GetObjects(Guids.DocumentsReference.Links.Files);
+            var documents = list.Cast<EngineeringDocumentObject>();
+
+            foreach (var document in documents)
+            {
+                var guidPrevStage = document.SystemFields.Stage.Guid;
+                bool flag = false;
+                if (!isEditable(document))
+                {
+                    stageController.ChangeStage(StageGuids.Корректировка, new List<ReferenceObject>() { document });
+                    flag = true;
+                }
+                document.StartUpdate();
+                document.AddFile(newFile);
+                document.EndUpdate($"Добавление подлинника {newFile} в доккумент {document}");
+                if (flag)
+                {
+                    stageController.ChangeStage(guidPrevStage, new List<ReferenceObject>() { document });
+                }
+                document.Reload();
+            }
+        }
+
+        private bool isEditable(ReferenceObject obj)
+        {
+            return obj.SystemFields.Stage.Guid.Equals(StageGuids.Корректировка) ||
+                obj.SystemFields.Stage.Guid.Equals(StageGuids.Разработка) ||
+                obj.SystemFields.Stage.Guid.Equals(StageGuids.Исправление);
+
         }
     }
 }

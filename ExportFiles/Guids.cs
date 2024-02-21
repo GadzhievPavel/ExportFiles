@@ -25,6 +25,10 @@ public static class Guids
             public static readonly Guid objectProductComposition = new Guid("f89e9648-c8a0-43f8-82bb-015cfe1486a4");
         }
 
+        public static class Links
+        {
+            public static readonly Guid Files = new Guid("9eda1479-c00d-4d28-bd8e-0d592c873303");
+        }
     }
 
     public static class ChangeReference

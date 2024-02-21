@@ -115,9 +115,9 @@ namespace ExportFiles
 
                 uploadedFile = UploadExportFile(tempExportingFilePath, fileObject.Parent.Path, fileObject, exportedFileName);
             }
-            catch
+            catch(SystemException ex)
             {
-                
+                throw ex;
             }
             finally
             {

@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DeveloperUtilsLibrary">
+      <HintPath>..\..\DeveloperUtilsLibrary\DeveloperUtilsLibrary\bin\Debug\DeveloperUtilsLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -56,8 +59,10 @@
     <Compile Include="Exception\ExportFilesException.cs" />
     <Compile Include="Exception\FileException\FileSizeException.cs" />
     <Compile Include="Exception\FileException\LoadLocalFileException.cs" />
+    <Compile Include="Handler\CadVariables\ControllerVariables.cs" />
     <Compile Include="Handler\ExportFilesGrbToTif.cs" />
     <Compile Include="Guids.cs" />
+    <Compile Include="Handler\NotificationModificationsExportNomenclature.cs" />
     <Compile Include="Handler\VariableHandler\FileVariables.cs" />
     <Compile Include="Handler\VariableHandler\ISetterVariable.cs" />
     <Compile Include="Handler\NomenclatureExport.cs" />
@@ -65,6 +70,8 @@
     <Compile Include="Handler\VariableHandler\SetVariablesFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
