@@ -17,7 +17,7 @@ namespace ExportFiles.Handler
     /// <summary>
     /// Класс для формирования подлинников в ИИ
     /// </summary>
-    public class ModificationNoticeExportNomenclature : NomenclatureExport
+    public class ModificationNoticeExportNomenclature : NomenclatureExport, IExport
     {
         /// <summary>
         /// Объект справочника "Извещения об изменениях"

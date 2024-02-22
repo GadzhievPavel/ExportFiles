@@ -1,4 +1,5 @@
 ﻿using DeveloperUtilsLibrary;
+using ExportFiles.Handler;
 using ExportFiles.Handler.CadVariables;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ using TFlex.DOCs.Model.References.Nomenclature;
 
 namespace ExportFiles
 {
-    public class NomenclatureExport
+    public class NomenclatureExport : IExport
     {
         /// <summary>
         /// список номенклатуры, которую необходимо конвертировать

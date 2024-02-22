@@ -59,13 +59,13 @@ namespace ExportFiles.Handler.CadVariables
         /// </summary>
         /// <param name="notice"></param>
         /// <exception cref="DataVariablesException">Если объект не является ИИ</exception>
-        public void SetNotice(ReferenceObject notice)
+        public void SetNotice(ReferenceObject _notice)
         {
-            if (!notice.Reference.ParameterGroup.ReferenceInfo.Guid.Equals(Guids.NoticeModificationReference.ИзвещенияОбИзменениях))
-            {
-                throw new DataVariablesException($"объект {notice} не относится к справчнику \"Измевещния обИзменениях\"");
-            }
-            this.notice = notice;
+            //if (!_notice.Reference.ParameterGroup.ReferenceInfo.Guid.Equals(Guids.NoticeModificationReference.ИзвещенияОбИзменениях))
+            //{
+            //    throw new DataVariablesException($"объект {_notice} не относится к справчнику \"Измевещния обИзменениях\"");
+            //}
+            this.notice = _notice;
         }
         public ReferenceObject GetNotice() { return notice; }
     }

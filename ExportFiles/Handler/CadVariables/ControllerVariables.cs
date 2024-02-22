@@ -102,7 +102,16 @@ namespace ExportFiles.Handler.CadVariables
             var nomenclature = (NomenclatureObject)nom;
             var document = nomenclature.LinkedObject as EngineeringDocumentObject;
             
-            var material = document.GetObject(Guids.DocumentsReference.Links.ОсновнойМатериал);
+            ReferenceObject material = null;
+            try
+            {
+                document.TryGetObject(Guids.DocumentsReference.Links.ОсновнойМатериал, out material);
+            }
+            catch
+            {
+
+            }
+
             if (material is null)
             {
                 return;
