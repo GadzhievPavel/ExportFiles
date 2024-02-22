@@ -57,9 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exception\ExportFilesException.cs" />
+    <Compile Include="Exception\FileException\DataVariablesException.cs" />
     <Compile Include="Exception\FileException\FileSizeException.cs" />
     <Compile Include="Exception\FileException\LoadLocalFileException.cs" />
     <Compile Include="Handler\CadVariables\ControllerVariables.cs" />
+    <Compile Include="Handler\CadVariables\DataVariables.cs" />
     <Compile Include="Handler\ExportFilesGrbToTif.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="Handler\NotificationModificationsExportNomenclature.cs" />
@@ -68,6 +70,7 @@
     <Compile Include="Handler\NomenclatureExport.cs" />
     <Compile Include="Handler\VariableHandler\NomenclatureSetterVariables.cs" />
     <Compile Include="Handler\VariableHandler\SetVariablesFile.cs" />
+    <Compile Include="LibraryPlugin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

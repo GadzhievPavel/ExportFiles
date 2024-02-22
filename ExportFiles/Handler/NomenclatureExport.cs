@@ -1,4 +1,5 @@
 ﻿using DeveloperUtilsLibrary;
+using ExportFiles.Handler.CadVariables;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace ExportFiles
         /// <summary>
         /// Конвертер
         /// </summary>
-        private ExportFilesGrbToTif export;
+        protected ExportFilesGrbToTif export;
         /// <summary>
         /// коллекция разрешенных типов номенклатур для генерации подлинников
         /// </summary>
@@ -39,7 +40,7 @@ namespace ExportFiles
         /// <summary>
         /// Набор пар номенклатура-файл
         /// </summary>
-        private Dictionary<NomenclatureObject, FileObject> fileObjects;
+        protected Dictionary<NomenclatureObject, FileObject> fileObjects;
         /// <summary>
         /// 
         /// </summary>
@@ -49,6 +50,8 @@ namespace ExportFiles
         ///
 
         private StageController stageController;
+
+        protected ControllerVariables controllerVariables;
         public NomenclatureExport(List<NomenclatureObject> nomenclatures, HashSet<NomenclatureType> types, ServerConnection connection)
         {
             this.nomenclatureReference = new NomenclatureReference(connection);
@@ -62,6 +65,7 @@ namespace ExportFiles
             }
             this.export = new ExportFilesGrbToTif(connection);
             this.stageController = new StageController(connection);
+            this.controllerVariables = new ControllerVariables(connection);
         }
 
         public NomenclatureExport(ServerConnection connection)
@@ -73,6 +77,7 @@ namespace ExportFiles
             this.export = new ExportFilesGrbToTif(connection);
             //files = new HashSet<FileObject>();
             this.stageController = new StageController(connection);
+            this.controllerVariables = new ControllerVariables(connection);
         }
 
 
@@ -151,12 +156,17 @@ namespace ExportFiles
             return enabledClassesObjectsNomenclature.Contains(nomenclature.Class);
         }
 
+        /// <summary>
+        /// Создает подлинник и подключает его к номенклатуре, к которой подключен исходник
+        /// </summary>
+        /// <param name="isNewFiles">делать новый файл подлинника или нет</param>
         public void Export(bool isNewFiles)
         {
             foreach (var pair in fileObjects)
             {
                 var fileSource = pair.Value;
                 export.SetFileObject(fileSource);
+                controllerVariables.SetVarriables(fileSource);
                 var newFile = export.ExportToFormat(isNewFiles);
                 if (isNewFiles)
                 {
@@ -170,7 +180,7 @@ namespace ExportFiles
         /// </summary>
         /// <param name="newFile"></param>
         /// <param name="sourceFile"></param>
-        private void addAllLinkedNomenclature(FileObject newFile, FileObject sourceFile)
+        protected void addAllLinkedNomenclature(FileObject newFile, FileObject sourceFile)
         {
             var list = sourceFile.GetObjects(Guids.DocumentsReference.Links.Files);
             var documents = list.Cast<EngineeringDocumentObject>();
@@ -195,6 +205,11 @@ namespace ExportFiles
             }
         }
 
+        /// <summary>
+        /// Можно редактировать или нет
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         private bool isEditable(ReferenceObject obj)
         {
             return obj.SystemFields.Stage.Guid.Equals(StageGuids.Корректировка) ||
