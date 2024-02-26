@@ -1,5 +1,6 @@
 ﻿using ExportFiles.Exception;
 using ExportFiles.Exception.FileException;
+using ExportFiles.Handler.CadVariables;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -115,7 +116,7 @@ namespace ExportFiles
 
                 uploadedFile = UploadExportFile(tempExportingFilePath, fileObject.Parent.Path, fileObject, exportedFileName);
             }
-            catch(SystemException ex)
+            catch (SystemException ex)
             {
                 throw ex;
             }
@@ -126,6 +127,55 @@ namespace ExportFiles
             return uploadedFile;
         }
 
+        public FileObject ExportToFormat(bool isNewFile, DataVariables dataVariables)
+        {
+            FileObject uploadedFile = null;
+            if (fileObject == null)
+            {
+                return null;
+            }
+            if (fileObject.Class.Extension != "grb")
+            {
+                return null;
+            }
+
+            if (!Directory.Exists(_tempFolder))
+                Directory.CreateDirectory(_tempFolder);
+
+            try
+            {
+                if (!LoadGrbFileToLocalPath(fileObject))
+                    return null;
+                //var pagesInfo = GetPagesInfo(fileObject.LocalPath);
+                _exportToNewFile = isNewFile;
+
+                string exportedFileName = fileObject.Name;
+                exportedFileName = exportedFileName.Substring(0, exportedFileName.Length - 4);
+                string tempExportingFilePath = Path.Combine(_tempFolder, String.Format("{0}.{1}", Guid.NewGuid(), _extensionDoc));
+
+                var exportContext = new ExportContext(tempExportingFilePath);
+                exportContext["resolution"] = _resolution;
+
+                var selectedPages = GetPagesInfo(fileObject.LocalPath);
+
+                var pages = selectedPages.Where(pg => pg.Name.Contains("Страница"));
+
+                exportContext.Pages.AddRange(pages.Cast<TFlexPageInfo>().Select(sp => sp.Index));
+
+                ExportGrbToSelectedFormat(exportContext, dataVariables);
+
+                uploadedFile = UploadExportFile(tempExportingFilePath, fileObject.Parent.Path, fileObject, exportedFileName);
+            }
+            catch (SystemException ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                ClearTemp();
+            }
+            return uploadedFile;
+        }
         /// <summary>
         /// Экспорт выбранного файла
         /// </summary>
@@ -163,6 +213,42 @@ namespace ExportFiles
             }
         }
 
+        private void ExportGrbToSelectedFormat(ExportContext exportContext, DataVariables dataVariables)
+        {
+            var pathToGrbFile = fileObject.LocalPath;
+
+            // Открытие документа grb
+            // Менять документ не будем, поэтому второй аргумент функции (readOnly) равен true
+            using (var document = provider.OpenDocument(pathToGrbFile, true))
+            {
+                var tempGrbFileName = Path.GetFileName(pathToGrbFile);
+
+                // Проверяем был ли открыт документ
+                if (document == null)
+                    throw new MacroException(String.Format("Файл '{0}' не может быть открыт", tempGrbFileName));
+
+                
+                var variables = document.GetVariables();
+                var variablesController = new ControllerVariables(this.connection);
+                variablesController.SetVariables(dataVariables, variables);
+                
+                // Экспортируем документ в другой формат на основе контекста настройки
+                // Получаем полный путь до экспортированного файла, для дальнейшей проверки экспорта
+                var path = document.Export(exportContext);
+
+                // Закрываем grb документ без сохранения
+                document.Close(false);
+
+                if (path == null)
+                {
+                    throw new MacroException(String.Format(
+                        "Ошибка экспорта.{0}" +
+                        "При операции экспорта в '{1}' произошли следующие ошибки:{0}" +
+                        "Файл '{2}' не может быть экспортирован",
+                        Environment.NewLine, _extensionDoc, tempGrbFileName));
+                }
+            }
+        }
         /// <summary>
         /// Загрузить экспортированный файл на сервер
         /// </summary>
@@ -362,7 +448,7 @@ namespace ExportFiles
         /// </summary>
         /// <param name="file"></param>
         /// <returns></returns>
-        private bool LoadGrbFileToLocalPath(FileObject file) 
+        private bool LoadGrbFileToLocalPath(FileObject file)
         {
             // Получаем последнюю версию файла
             file.GetHeadRevision();
