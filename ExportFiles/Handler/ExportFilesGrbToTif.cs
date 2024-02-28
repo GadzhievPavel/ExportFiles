@@ -1,4 +1,5 @@
-﻿using ExportFiles.Exception;
+﻿using DeveloperUtilsLibrary;
+using ExportFiles.Exception;
 using ExportFiles.Exception.FileException;
 using ExportFiles.Handler.CadVariables;
 using System;
@@ -227,11 +228,11 @@ namespace ExportFiles
                 if (document == null)
                     throw new MacroException(String.Format("Файл '{0}' не может быть открыт", tempGrbFileName));
 
-                
+
                 var variables = document.GetVariables();
                 var variablesController = new ControllerVariables(this.connection);
                 variablesController.SetVariables(dataVariables, variables);
-                
+
                 // Экспортируем документ в другой формат на основе контекста настройки
                 // Получаем полный путь до экспортированного файла, для дальнейшей проверки экспорта
                 var path = document.Export(exportContext);

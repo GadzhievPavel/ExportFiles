@@ -190,7 +190,7 @@ namespace ExportFiles
             {
                 var guidPrevStage = document.SystemFields.Stage.Guid;
                 bool flag = false;
-                if (!isEditable(document))
+                if (!StageController.isEditable(document))
                 {
                     stageController.ChangeStage(StageGuids.Корректировка, new List<ReferenceObject>() { document });
                     flag = true;
@@ -206,17 +206,17 @@ namespace ExportFiles
             }
         }
 
-        /// <summary>
-        /// Можно редактировать или нет
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        private bool isEditable(ReferenceObject obj)
-        {
-            return obj.SystemFields.Stage.Guid.Equals(StageGuids.Корректировка) ||
-                obj.SystemFields.Stage.Guid.Equals(StageGuids.Разработка) ||
-                obj.SystemFields.Stage.Guid.Equals(StageGuids.Исправление);
+        ///// <summary>
+        ///// Можно редактировать или нет
+        ///// </summary>
+        ///// <param name="obj"></param>
+        ///// <returns></returns>
+        //public static bool isEditable(ReferenceObject obj)
+        //{
+        //    return obj.SystemFields.Stage.Guid.Equals(StageGuids.Корректировка) ||
+        //        obj.SystemFields.Stage.Guid.Equals(StageGuids.Разработка) ||
+        //        obj.SystemFields.Stage.Guid.Equals(StageGuids.Исправление);
 
-        }
+        //}
     }
 }

@@ -63,32 +63,6 @@ namespace ExportFiles.Handler.CadVariables
             }
         }
 
-        ///// <summary>
-        ///// Установка в переменные файла значений в соответствии с подготовленным набором данных
-        ///// </summary>
-        ///// <param name="dataVariables"></param>
-        ///// <exception cref="LoadLocalFileException"></exception>
-        //public void SetVarriables(DataVariables dataVariables)
-        //{
-        //    LoadGRBFileToLocalPath(dataVariables.GetFileObject());
-        //    using (var document = provider.OpenDocument(dataVariables.GetFileObject().LocalPath, false))
-        //    {
-        //        if (document == null)
-        //            throw new LoadLocalFileException(String.Format("Файл '{0}' не может быть открыт", Path.GetFileName(dataVariables.GetFileObject().LocalPath)));
-        //        var variables = document.GetVariables();
-
-        //        SetSignaturesVariables(dataVariables.GetFileObject().Signatures, variables);
-        //        if (dataVariables.GetNotice() != null)
-        //        {
-        //            SetNotificationVariables(variables, dataVariables.GetFileObject(), dataVariables.GetNotice());
-        //        }
-        //        SetBaseInfoVariables(variables, dataVariables.GetFileObject(), dataVariables.GetNomenclature());
-
-        //        variables.Save();
-        //        document.Close(false);
-        //    }
-        //}
-
         /// <summary>
         /// Заполнение основной надписи чертежа (Наименование/Обозначение/Основной материал(если есть))
         /// </summary>
