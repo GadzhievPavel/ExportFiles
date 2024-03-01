@@ -206,6 +206,19 @@ namespace ExportFiles
             }
         }
 
+        /// <summary>
+        /// Возвращает список подлинников
+        /// </summary>
+        public List<FileObject> GetTifFiles()
+        {
+            List<FileObject> listFiles = new List<FileObject>();
+            foreach(var nomenclature in fileObjects.Keys)
+            {
+                var document = nomenclature.LinkedObject as EngineeringDocumentObject;
+                listFiles.Add(document.GetFiles().Where(file => file.Class.Extension.ToLower().Equals("tif")).FirstOrDefault());
+            }
+            return listFiles;
+        }
         ///// <summary>
         ///// Можно редактировать или нет
         ///// </summary>
