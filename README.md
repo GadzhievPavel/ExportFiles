@@ -1,1 +1,1 @@
-﻿Работа с документацией [ссылка](./docs/index.md) 
+﻿Работа с документацией [ссылка](https://github.com/GadzhievPavel/ExportFiles/blob/master/ExportFiles/docs/index.md) 
