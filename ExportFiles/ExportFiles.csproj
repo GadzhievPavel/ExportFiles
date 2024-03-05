@@ -80,6 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="docs\ExportNomenclature.md" />
+    <None Include="docs\ExportNotify.md" />
     <None Include="docs\index.md" />
     <None Include="..\README.md">
       <Link>README.md</Link>
