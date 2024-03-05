@@ -43,6 +43,7 @@ namespace ExportFiles.Handler
                     AddNomenclature(nomenclature);
                 }
             }
+            this.notice = notice;
         }
 
         /// <summary>
@@ -59,8 +60,8 @@ namespace ExportFiles.Handler
                 dataVariables.SetNotice(notice);
                 dataVariables.SetFileObject(fileSource);
                 dataVariables.SetNomenclature(pair.Key);
-                controllerVariables.SetVarriables(dataVariables);
-                var newFile = export.ExportToFormat(isNewFiles);
+                //controllerVariables.SetVarriables(dataVariables);
+                var newFile = export.ExportToFormat(isNewFiles, dataVariables);
                 if (isNewFiles)
                 {
                     addAllLinkedNomenclature(newFile, fileSource);

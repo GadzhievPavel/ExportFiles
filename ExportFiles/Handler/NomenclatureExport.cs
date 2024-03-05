@@ -190,7 +190,7 @@ namespace ExportFiles
             {
                 var guidPrevStage = document.SystemFields.Stage.Guid;
                 bool flag = false;
-                if (!isEditable(document))
+                if (!StageController.isEditable(document))
                 {
                     stageController.ChangeStage(StageGuids.Корректировка, new List<ReferenceObject>() { document });
                     flag = true;
@@ -207,16 +207,29 @@ namespace ExportFiles
         }
 
         /// <summary>
-        /// Можно редактировать или нет
+        /// Возвращает список подлинников
         /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        private bool isEditable(ReferenceObject obj)
+        public List<FileObject> GetTifFiles()
         {
-            return obj.SystemFields.Stage.Guid.Equals(StageGuids.Корректировка) ||
-                obj.SystemFields.Stage.Guid.Equals(StageGuids.Разработка) ||
-                obj.SystemFields.Stage.Guid.Equals(StageGuids.Исправление);
-
+            List<FileObject> listFiles = new List<FileObject>();
+            foreach(var nomenclature in fileObjects.Keys)
+            {
+                var document = nomenclature.LinkedObject as EngineeringDocumentObject;
+                listFiles.Add(document.GetFiles().Where(file => file.Class.Extension.ToLower().Equals("tif")).FirstOrDefault());
+            }
+            return listFiles;
         }
+        ///// <summary>
+        ///// Можно редактировать или нет
+        ///// </summary>
+        ///// <param name="obj"></param>
+        ///// <returns></returns>
+        //public static bool isEditable(ReferenceObject obj)
+        //{
+        //    return obj.SystemFields.Stage.Guid.Equals(StageGuids.Корректировка) ||
+        //        obj.SystemFields.Stage.Guid.Equals(StageGuids.Разработка) ||
+        //        obj.SystemFields.Stage.Guid.Equals(StageGuids.Исправление);
+
+        //}
     }
 }
