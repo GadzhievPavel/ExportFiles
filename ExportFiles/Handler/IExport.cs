@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TFlex.DOCs.Model.References.Files;
+using TFlex.DOCs.Model.References.Nomenclature;
 
 namespace ExportFiles.Handler
 {
@@ -20,5 +21,11 @@ namespace ExportFiles.Handler
         /// </summary>
         /// <returns></returns>
         List<FileObject> GetTifFiles();
+
+        /// <summary>
+        /// Возвращает номенклатуру
+        /// </summary>
+        /// <returns></returns>
+        List<NomenclatureObject> GetNomenclatures();
     }
 }

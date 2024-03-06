@@ -231,5 +231,10 @@ namespace ExportFiles
         //        obj.SystemFields.Stage.Guid.Equals(StageGuids.Исправление);
 
         //}
+        
+        public List<NomenclatureObject> GetNomenclatures()
+        {
+            return this.fileObjects.Keys.ToList();
+        }
     }
 }
