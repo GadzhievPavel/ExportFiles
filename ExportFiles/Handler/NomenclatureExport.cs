@@ -167,8 +167,11 @@ namespace ExportFiles
             {
                 var fileSource = pair.Value;
                 export.SetFileObject(fileSource);
+                DataVariables dataVariables = new DataVariables();// создан объект с переменными
+                dataVariables.SetFileObject(fileSource);//
+                dataVariables.SetNomenclature(pair.Key);//
                 controllerVariables.SetVarriables(fileSource);
-                var newFile = export.ExportToFormat(isNewFiles);
+                var newFile = export.ExportToFormat(isNewFiles, dataVariables);// использован второй параметр
                 if (isNewFiles)
                 {
                     addAllLinkedNomenclature(newFile, fileSource);

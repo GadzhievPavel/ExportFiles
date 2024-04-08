@@ -71,6 +71,10 @@ namespace ExportFiles.Handler.CadVariables
         /// <param name="nom">номенклатура</param>
         private void SetBaseInfoVariables(VariableCollection variables, FileObject file, NomenclatureObject nom)
         {
+            if (nom.Class.IsAssembly)
+            {
+                TrySetVarribleValue(variables, "$Vid_Chert", "Сборочный чертеж");
+            }
             TrySetVarribleValue(variables, "$Наименование", nom.Name);
             TrySetVarribleValue(variables, "$Обозначение", nom.Denotation);
             var nomenclature = (NomenclatureObject)nom;
