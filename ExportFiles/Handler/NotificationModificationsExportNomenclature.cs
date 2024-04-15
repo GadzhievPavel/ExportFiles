@@ -23,7 +23,7 @@ namespace ExportFiles.Handler
         /// Объект справочника "Извещения об изменениях"
         /// </summary>
         private ReferenceObject notice;
-        
+
         public ModificationNoticeExportNomenclature(ServerConnection connection) : base(connection)
         {
         }
@@ -38,6 +38,10 @@ namespace ExportFiles.Handler
             foreach (var modification in modifications)
             {
                 var nomenclature = modification.GetObject(ModificationReferenceObject.RelationKeys.PDMObject) as NomenclatureObject;
+                if (nomenclature is null)
+                {
+                    continue;
+                }
                 if (isEnabledStage(nomenclature))
                 {
                     AddNomenclature(nomenclature);
