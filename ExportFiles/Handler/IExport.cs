@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExportFiles.Handler.CadVariables;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,6 +16,8 @@ namespace ExportFiles.Handler
         /// </summary>
         /// <param name="isNewFile"></param>
         void Export(bool isNewFile);
+
+        void Export(DataVariables dataVariables, bool isNewFile);
 
         /// <summary>
         /// Возвращает подлинники с форматом tif

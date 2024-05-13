@@ -180,6 +180,26 @@ namespace ExportFiles
         }
 
         /// <summary>
+        /// Создает подлинник и подключает его к номенклатуре, к которой подключен исходник
+        /// </summary>
+        /// <param name="dataVariables"></param>
+        /// <param name="isNewFile"></param>
+        public void Export(DataVariables dataVariables, bool isNewFile)
+        {
+            foreach(var pair in fileObjects)
+            {
+                var fileSource = pair.Value;
+                export.SetFileObject(fileSource);
+                controllerVariables.SetVarriables(fileSource);
+                var newFile = export.ExportToFormat(isNewFile, dataVariables);// использован второй параметр
+                if (isNewFile)
+                {
+                    addAllLinkedNomenclature(newFile, fileSource);
+                }
+            }
+        }
+
+        /// <summary>
         /// Подключаем подлинники ко всей номенклатуре, к которой подключен исходник
         /// </summary>
         /// <param name="newFile"></param>
@@ -239,5 +259,6 @@ namespace ExportFiles
         {
             return this.fileObjects.Keys.ToList();
         }
+
     }
 }
