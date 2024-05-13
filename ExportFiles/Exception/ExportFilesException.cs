@@ -8,6 +8,6 @@ namespace ExportFiles.Exception
 {
     public class ExportFilesException : SystemException
     {
-        public ExportFilesException(string message): base(message)  { }
+        public ExportFilesException(string message): base(message)   { }
     }
 }
