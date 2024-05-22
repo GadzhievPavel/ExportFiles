@@ -66,6 +66,7 @@
     <Compile Include="Handler\ExportFilesGrbToTif.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="Handler\IExport.cs" />
+    <Compile Include="Handler\Model\At3bootNomenclatureObject.cs" />
     <Compile Include="Handler\NotificationModificationsExportNomenclature.cs" />
     <Compile Include="Handler\VariableHandler\FileVariables.cs" />
     <Compile Include="Handler\VariableHandler\ISetterVariable.cs" />
@@ -86,5 +87,6 @@
       <Link>README.md</Link>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

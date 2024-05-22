@@ -76,6 +76,8 @@ namespace ExportFiles.Handler.CadVariables
                 TrySetVarribleValue(variables, "$Vid_Chert", "Сборочный чертеж");
             }
             TrySetVarribleValue(variables, "$Наименование", nom.Name);
+
+
             TrySetVarribleValue(variables, "$Обозначение", nom.Denotation);
             var nomenclature = (NomenclatureObject)nom;
             var document = nomenclature.LinkedObject as EngineeringDocumentObject;
