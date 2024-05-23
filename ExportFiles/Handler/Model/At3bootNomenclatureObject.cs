@@ -21,6 +21,7 @@ namespace ExportFiles.Handler.Model
         public bool haveGroupDrawing()
         {
             var versions = nom.GetVersions();
+
             var selectDoc = nom.LinkedObject as EngineeringDocumentObject;
             var selectGrbFiles = selectDoc.GetFiles().Where(file => file.Class.Extension.ToLower().Equals("grb")).FirstOrDefault();
 
@@ -31,9 +32,11 @@ namespace ExportFiles.Handler.Model
 
             var nomLinkedGrbFiles = findNomenclatureByFile(selectGrbFiles);
 
-            var findedGroupDrawings = getGroupDrawings(versions, nomLinkedGrbFiles);
+            var findedGroupDrawings = getGroupDrawings(nomLinkedGrbFiles, versions);
 
-            return findedGroupDrawings.Contains(nom.BaseVersion);
+            var baseVersion = nom.BaseVersion;
+
+            return findedGroupDrawings.Contains(baseVersion);
         }
 
         private List<NomenclatureObject> getGroupDrawings(List<NomenclatureObject> versions, List<NomenclatureObject> groupNomenclature)
