@@ -13,6 +13,7 @@ using TFlex.DOCs.Model.References;
 using TFlex.DOCs.Model.References.Files;
 using TFlex.DOCs.Model.References.Nomenclature;
 using TFlex.DOCs.Model.Signatures;
+using ExportFiles.Handler.Model;
 
 namespace ExportFiles.Handler.CadVariables
 {
@@ -77,8 +78,17 @@ namespace ExportFiles.Handler.CadVariables
             }
             TrySetVarribleValue(variables, "$Наименование", nom.Name);
 
+            var nomWrap = new At3bootNomenclatureObject(nom);
+            if (nomWrap.haveGroupDrawing())
+            {
+                TrySetVarribleValue(variables, "$Обозначение", nom.GetBaseDenotation());
+            }
+            else
+            {
+                TrySetVarribleValue(variables, "$Обозначение", nom.Denotation);
+            }
 
-            TrySetVarribleValue(variables, "$Обозначение", nom.Denotation);
+
             var nomenclature = (NomenclatureObject)nom;
             var document = nomenclature.LinkedObject as EngineeringDocumentObject;
 

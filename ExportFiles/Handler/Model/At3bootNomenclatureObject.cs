@@ -10,6 +10,9 @@ using TFlex.DOCs.Model.References.Nomenclature;
 
 namespace ExportFiles.Handler.Model
 {
+    /// <summary>
+    /// Класс обертка Номенклатуры PDM 
+    /// </summary>
     public class At3bootNomenclatureObject
     {
         private NomenclatureObject nom;
@@ -18,6 +21,10 @@ namespace ExportFiles.Handler.Model
             this.nom = nom;
         }
 
+        /// <summary>
+        /// Имеет групповой чертеж
+        /// </summary>
+        /// <returns></returns>
         public bool haveGroupDrawing()
         {
             var versions = nom.GetVersions();
@@ -34,11 +41,17 @@ namespace ExportFiles.Handler.Model
 
             var findedGroupDrawings = getGroupDrawings(nomLinkedGrbFiles, versions);
 
-            var baseVersion = nom.BaseVersion;
+            var listGroupNom = findedGroupDrawings.Where(n=> n.Class.Equals(nom.Class)).ToList();
 
-            return findedGroupDrawings.Contains(baseVersion);
+            return listGroupNom.Count > 1;
         }
 
+        /// <summary>
+        /// Вернуть все исполнения связанные груповым чертежом
+        /// </summary>
+        /// <param name="versions"></param>
+        /// <param name="groupNomenclature"></param>
+        /// <returns></returns>
         private List<NomenclatureObject> getGroupDrawings(List<NomenclatureObject> versions, List<NomenclatureObject> groupNomenclature)
         {
             List<NomenclatureObject> nomList = new List<NomenclatureObject>();
@@ -52,7 +65,12 @@ namespace ExportFiles.Handler.Model
             return nomList.Any()? nomList: null;
         }
 
-        private List<NomenclatureObject> findNomenclatureByFile(FileObject file)
+        /// <summary>
+        /// Поиск номенклатуры по прикрепленному файлу
+        /// </summary>
+        /// <param name="file"></param>
+        /// <returns></returns>
+        public List<NomenclatureObject> findNomenclatureByFile(FileObject file)
         {
             List<NomenclatureObject> nomenclatures = new List<NomenclatureObject>();
             var documents = file.GetObjects(FileObject.RelationKeys.Document);
