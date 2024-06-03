@@ -67,6 +67,7 @@
     <Compile Include="Guids.cs" />
     <Compile Include="Handler\IExport.cs" />
     <Compile Include="Handler\Model\At3bootNomenclatureObject.cs" />
+    <Compile Include="Handler\Model\GroupDrawing.cs" />
     <Compile Include="Handler\NotificationModificationsExportNomenclature.cs" />
     <Compile Include="Handler\VariableHandler\FileVariables.cs" />
     <Compile Include="Handler\VariableHandler\ISetterVariable.cs" />

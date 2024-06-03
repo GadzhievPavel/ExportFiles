@@ -81,7 +81,8 @@ namespace ExportFiles.Handler.CadVariables
             var nomWrap = new At3bootNomenclatureObject(nom);
             if (nomWrap.haveGroupDrawing())
             {
-                TrySetVarribleValue(variables, "$Обозначение", nom.GetBaseDenotation());
+                var groupDrawing = nomWrap.getGroupDrawing();
+                TrySetVarribleValue(variables, "$Обозначение", groupDrawing.getDenotationBaseVariant());
             }
             else
             {

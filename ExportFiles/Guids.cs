@@ -87,4 +87,15 @@ public static class Guids
             public static readonly Guid СводноеНаименование = new Guid("23cfeee6-57f3-4a1e-9cf0-9040fed0e90c");
         }
     }
+
+    /// <summary>
+    /// Guid ы справочника номенклатура
+    /// </summary>
+    public static class NomenclatureReference
+    {
+        /// <summary>
+        /// Guid типа "Сборочный чертеж"
+        /// </summary>
+        public static readonly Guid TypeAssemblyDrawing = new Guid("00542618-0248-435b-b308-928cb7131655");
+    }
 }
