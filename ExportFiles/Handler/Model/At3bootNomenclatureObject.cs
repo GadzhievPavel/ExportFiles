@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExportFiles.Exception.FileException;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,7 +28,7 @@ namespace ExportFiles.Handler.Model
         /// <returns></returns>
         public bool haveGroupDrawing()
         {
-            var versions = nom.GetVersions();
+            var versions = nom.GetVersions();///все исполнения и их ревизии
 
             var selectDoc = nom.LinkedObject as EngineeringDocumentObject;
             var selectGrbFiles = selectDoc.GetFiles().Where(file => file.Class.Extension.ToLower().Equals("grb")).FirstOrDefault();
@@ -39,17 +40,24 @@ namespace ExportFiles.Handler.Model
 
             var nomLinkedGrbFiles = findNomenclatureByFile(selectGrbFiles);
 
-            var findedGroupDrawings = getAllVariantsWhitGroupDrawings(nomLinkedGrbFiles, versions);
+            var drawings = nomLinkedGrbFiles.Where(n => n.Class.IsDrawing || n.Class.Guid.Equals(Guids.NomenclatureReference.TypeAssemblyDrawing)).ToList();
+            if (!drawings.Any())
+            {
+                if (drawings.Count() > 1)
+                {
+                    throw new DataVariablesException("у номенклатуры не может быть более 2 групповых чертежей");
+                }
+            }
 
-            var listGroupNom = findedGroupDrawings.Where(n => n.Class.Equals(nom.Class)).ToList();
+            var drawing = drawings.FirstOrDefault();
 
-            return listGroupNom.Count > 1;
+            return drawing != null ? true : false;
         }
 
         /// <summary>
         /// Вернуть все исполнения связанные групповым чертежом
         /// </summary>
-        /// <param name="versions"></param>
+        /// <param name="versions">все исполнения и все их ревизии</param>
         /// <param name="groupNomenclature"></param>
         /// <returns></returns>
         private List<NomenclatureObject> getAllVariantsWhitGroupDrawings(List<NomenclatureObject> versions, List<NomenclatureObject> groupNomenclature)
@@ -76,9 +84,12 @@ namespace ExportFiles.Handler.Model
             var selectGrbFiles = selectDoc.GetFiles().Where(file => file.Class.Extension.ToLower().Equals("grb")).FirstOrDefault();
             var nomLinkedGrbFiles = findNomenclatureByFile(selectGrbFiles);
 
-            var findedGroupDrawings = getAllVariantsWhitGroupDrawings(nomLinkedGrbFiles, versions);
-            var drawing = findedGroupDrawings.Where(n => n.Class.IsDrawing || n.Class.Guid.Equals(Guids.NomenclatureReference.TypeAssemblyDrawing)).FirstOrDefault();
-            return new GroupDrawing(drawing);
+            var drawings = nomLinkedGrbFiles.Where(n => n.Class.IsDrawing || n.Class.Guid.Equals(Guids.NomenclatureReference.TypeAssemblyDrawing));
+            if (drawings.Count() > 1)
+            {
+                throw new DataVariablesException("Файл не может быть подключен в более чем один объект типа \"Чертеж\" или \"Сборочный чертеже\"");
+            }
+            return new GroupDrawing(drawings.FirstOrDefault());
 
         }
         /// <summary>
