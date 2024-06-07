@@ -43,10 +43,11 @@ namespace ExportFiles.Handler.Model
             var drawings = nomLinkedGrbFiles.Where(n => n.Class.IsDrawing || n.Class.Guid.Equals(Guids.NomenclatureReference.TypeAssemblyDrawing)).ToList();
             if (!drawings.Any())
             {
-                if (drawings.Count() > 1)
-                {
-                    throw new DataVariablesException("у номенклатуры не может быть более 2 групповых чертежей");
-                }
+                return false;
+            }
+            if (drawings.Count() > 1)
+            {
+                throw new DataVariablesException("у номенклатуры не может быть более 2 групповых чертежей");
             }
 
             var drawing = drawings.FirstOrDefault();
@@ -85,6 +86,10 @@ namespace ExportFiles.Handler.Model
             var nomLinkedGrbFiles = findNomenclatureByFile(selectGrbFiles);
 
             var drawings = nomLinkedGrbFiles.Where(n => n.Class.IsDrawing || n.Class.Guid.Equals(Guids.NomenclatureReference.TypeAssemblyDrawing));
+            if (!drawings.Any())
+            {
+                return null;
+            }
             if (drawings.Count() > 1)
             {
                 throw new DataVariablesException("Файл не может быть подключен в более чем один объект типа \"Чертеж\" или \"Сборочный чертеже\"");
