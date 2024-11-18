@@ -44,6 +44,8 @@ public static class Guids
         public static class Parameter
         {
             public static readonly Guid НомерИзменения = new Guid("91486563-d044-4045-814b-3432b67812f1");
+            ///параметр Устанавливать Нов.
+            public static readonly Guid ПараметрНовый = new Guid("bb02caa4-1085-4bc3-937f-dd80ecc25aa8");
         }
         public static class Links
         {

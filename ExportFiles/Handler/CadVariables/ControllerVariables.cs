@@ -144,6 +144,10 @@ namespace ExportFiles.Handler.CadVariables
                 {
                     TrySetVarribleValue(variables, "$izm", change[Guids.ChangeReference.Parameter.НомерИзменения].GetString());
                 }
+
+                var isNew = change[Guids.ChangeReference.Parameter.ПараметрНовый].GetBoolean();
+                TrySetVarribleValue(variables, "$flag_new", isNew);
+                
             }
 
             var signDocumentoved = file.Signatures.Where(sign => sign.SignatureObjectType.Id == 25).FirstOrDefault();
