@@ -150,12 +150,12 @@ namespace ExportFiles.Handler.CadVariables
                 
             }
 
-            var signDocumentoved = file.Signatures.Where(sign => sign.SignatureObjectType.Id == 25).FirstOrDefault();
-            if (signDocumentoved is null)
-            {
-                return;
-            }
-            TrySetVarribleValue(variables, "$d_doc", signDocumentoved.SignatureDate.Value.ToString("d.MM.yy"));
+            //var signDocumentoved = file.Signatures.Where(sign => sign.SignatureObjectType.Id == 25).FirstOrDefault();
+            //if (signDocumentoved is null)
+            //{
+            //    return;
+            //}
+            //TrySetVarribleValue(variables, "$d_doc", signDocumentoved.SignatureDate.Value.ToString("d.MM.yy"));
         }
 
         /// <summary>
