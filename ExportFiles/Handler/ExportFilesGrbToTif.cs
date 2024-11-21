@@ -344,16 +344,28 @@ namespace ExportFiles
         /// </summary>
         /// <param name="grbFileObject"></param>
         /// <param name="exportedFile"></param>
+        //private void AddDocument(FileObject grbFileObject, FileObject exportedFile)
+        //{
+        //    var masterObject = grbFileObject.MasterObject;
+        //    if (masterObject is EngineeringDocumentObject documentObject)
+        //    {
+        //        if (!exportedFile.Links.ToMany[EngineeringDocumentFields.File]
+        //            .Objects
+        //            .Any(document => document.SystemFields.Guid == documentObject.SystemFields.Guid))
+        //        {
+        //            exportedFile.AddLinkedObject(EngineeringDocumentFields.File, documentObject);
+        //        }
+        //    }
+        //}
+
         private void AddDocument(FileObject grbFileObject, FileObject exportedFile)
         {
-            var masterObject = grbFileObject.MasterObject;
-            if (masterObject is EngineeringDocumentObject documentObject)
+            var documents = grbFileObject.GetObjects(EngineeringDocumentFields.File);
+            foreach(var document in documents)
             {
-                if (!exportedFile.Links.ToMany[EngineeringDocumentFields.File]
-                    .Objects
-                    .Any(document => document.SystemFields.Guid == documentObject.SystemFields.Guid))
+                if(document is EngineeringDocumentObject documentObject)
                 {
-                    exportedFile.AddLinkedObject(EngineeringDocumentFields.File, documentObject);
+                    exportedFile.AddLinkedObject(EngineeringDocumentFields.File, document);
                 }
             }
         }
