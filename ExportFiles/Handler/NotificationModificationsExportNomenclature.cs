@@ -70,6 +70,7 @@ namespace ExportFiles.Handler
                 {
                     addAllLinkedNomenclature(newFile, fileSource);
                 }
+
             }
         }
 
@@ -80,6 +81,7 @@ namespace ExportFiles.Handler
         /// <returns></returns>
         private bool isEnabledStage(NomenclatureObject nomenclature)
         {
+   
             return !nomenclature.SystemFields.Stage.Guid.Equals(StageGuids.Хранение);
         }
     }

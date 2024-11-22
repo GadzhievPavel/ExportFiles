@@ -14,6 +14,7 @@ using TFlex.DOCs.Model.References.Files;
 using TFlex.DOCs.Model.References.Nomenclature;
 using TFlex.DOCs.Model.Signatures;
 using ExportFiles.Handler.Model;
+using TFlex.DOCs.Model.References.Users;
 
 namespace ExportFiles.Handler.CadVariables
 {
@@ -187,7 +188,8 @@ namespace ExportFiles.Handler.CadVariables
             if (userSignature is null)
                 return;
 
-            TrySetVarribleValue(varribles, userVarribleName, userSignature.UserName);
+            var user = userSignature.UserObject as User;
+            TrySetVarribleValue(varribles, userVarribleName, user.ShortName);
             TrySetVarribleValue(varribles, dataVarrivbleName, userSignature.SignatureDate.Value.ToString("d.MM.yy"));
         }
 
