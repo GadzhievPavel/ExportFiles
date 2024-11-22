@@ -126,7 +126,7 @@ namespace ExportFiles
         /// Проверка на наличие файлов
         /// </summary>
         /// <param name="nomenclature"></param>
-        /// <returns></returns>
+        /// <returns>grb файл исходника</returns>
         public FileObject HaveGRBFile(NomenclatureObject nomenclature)
         {
             var document = nomenclature.LinkedObject as EngineeringDocumentObject;
