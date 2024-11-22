@@ -114,7 +114,7 @@ namespace ExportFiles
                 exportContext.Pages.AddRange(pages.Cast<TFlexPageInfo>().Select(sp => sp.Index));
 
                 ExportGrbToSelectedFormat(exportContext);
-
+                
                 uploadedFile = UploadExportFile(tempExportingFilePath, fileObject.Parent.Path, fileObject, exportedFileName);
             }
             catch (SystemException ex)
@@ -164,8 +164,18 @@ namespace ExportFiles
                 exportContext.Pages.AddRange(pages.Cast<TFlexPageInfo>().Select(sp => sp.Index));
 
                 ExportGrbToSelectedFormat(exportContext, dataVariables);
+                var tifFiles = haveTif(nomenclature);
+                if (tifFiles is null)
+                {
+                    uploadedFile = UploadExportFile(tempExportingFilePath, fileObject.Parent.Path, fileObject, exportedFileName);
 
-                uploadedFile = UploadExportFile(tempExportingFilePath, fileObject.Parent.Path, fileObject, exportedFileName);
+                }
+                else
+                {
+                    uploadedFile = UploadExportFile(tempExportingFilePath, tifFiles.Parent.Path, fileObject, exportedFileName);
+
+                }
+                //uploadedFile = UploadExportFile(tempExportingFilePath, fileObject.Parent.Path, fileObject, exportedFileName);
             }
             catch (SystemException ex)
             {
@@ -176,6 +186,12 @@ namespace ExportFiles
                 ClearTemp();
             }
             return uploadedFile;
+        }
+
+        private FileObject haveTif(NomenclatureObject nom)
+        {
+            var document = nom.LinkedObject as EngineeringDocumentObject;
+            return document.GetFiles().Where(f=> f.Class.Extension.ToLower().Equals("tif")).FirstOrDefault();
         }
         /// <summary>
         /// Экспорт выбранного файла

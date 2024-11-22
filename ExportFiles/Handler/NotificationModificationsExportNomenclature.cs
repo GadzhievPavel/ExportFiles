@@ -59,7 +59,9 @@ namespace ExportFiles.Handler
             foreach (var pair in fileObjects)
             {
                 var fileSource = pair.Value;
+                var nomenclature = pair.Key;
                 export.SetFileObject(fileSource);
+                export.SetNomenclature(nomenclature);
                 DataVariables dataVariables = new DataVariables();
                 dataVariables.SetNotice(notice);
                 dataVariables.SetFileObject(fileSource);
