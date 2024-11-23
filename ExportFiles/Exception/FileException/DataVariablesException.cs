@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace ExportFiles.Exception.FileException
 {
-    public class DataVariablesException:SystemException
+    public class DataVariablesException:ExportFilesException
     {
         public DataVariablesException(string message) : base(message)
         {

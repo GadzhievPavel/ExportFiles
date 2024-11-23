@@ -34,6 +34,9 @@
     <Reference Include="DeveloperUtilsLibrary">
       <HintPath>..\..\DeveloperUtilsLibrary\DeveloperUtilsLibrary\bin\Debug\DeveloperUtilsLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -63,6 +66,8 @@
     <Compile Include="Handler\CadVariables\ControllerVariables.cs" />
     <Compile Include="Handler\CadVariables\DataVariables.cs" />
     <Compile Include="Handler\CadVariables\IControllerVariables.cs" />
+    <Compile Include="Handler\Exporter\ExportParams.cs" />
+    <Compile Include="Handler\Exporter\FileExporter.cs" />
     <Compile Include="Handler\ExportFilesGrbToTif.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="Handler\IExport.cs" />
@@ -87,6 +92,7 @@
     <None Include="..\README.md">
       <Link>README.md</Link>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
