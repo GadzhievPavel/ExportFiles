@@ -24,5 +24,9 @@ namespace ExportFiles.Handler.Exporter
         /// код назначения
         /// </summary>
         public string code;
+        /// <summary>
+        /// расширение файла
+        /// </summary>
+        public string extension;
     }
 }

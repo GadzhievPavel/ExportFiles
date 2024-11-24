@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TFlex.DOCs.Model;
+using TFlex.DOCs.Model.FilePreview.CADService;
+using TFlex.DOCs.Model.FilePreview.CADService.TFlexCadDocument;
 using TFlex.DOCs.Model.References.Files;
 
 namespace ExportFiles.Handler.Exporter
@@ -34,6 +36,10 @@ namespace ExportFiles.Handler.Exporter
         private string _extensionDoc = "tif";
 
         private ExportParams exportParameters;
+        /// <summary>
+        /// провайдер для работы с CAD документом T-FLEX
+        /// </summary>
+        private CadDocumentProvider provider;
         public FileExporter(ServerConnection connection, FileObject fileSettings, bool isNew)
         {
             this.connection = connection;
@@ -42,6 +48,8 @@ namespace ExportFiles.Handler.Exporter
 
             if (!Directory.Exists(_tempFolder))
                 Directory.CreateDirectory(_tempFolder);
+
+            this.provider = CadDocumentProvider.Connect(connection, ".grb");
         }
 
         public FileExporter(ServerConnection connection, bool isNew) : this(connection, null, isNew)
@@ -75,7 +83,7 @@ namespace ExportFiles.Handler.Exporter
 
                 exportParameters = (ExportParams)JsonConvert.DeserializeObject(textFromFile);
             }
-            catch(SystemException ex)
+            catch (SystemException ex)
             {
                 throw new ExportFilesException(ex);
             }
@@ -105,16 +113,45 @@ namespace ExportFiles.Handler.Exporter
             try
             {
                 LoadFileToLocalPath(file);
+                if (exportParameters is null)
+                {
+                    throw new ExportFilesException("отсутсвуют параметры для экспорта");
+                }
 
+                var document = provider.OpenDocument(file.LocalPath, false);
+                if (document is null)
+                {
+                    throw new ExportFilesException(String.Format(
+                        "Ошибка получения страниц.{0}" +
+                        "При операции получения страниц произошла следующая ошибка:{0}" +
+                        "Файл '{1}' не может быть открыт", Environment.NewLine, file.Name));
+                }
 
-                var exportedFileName = getNameExportFile(file);
-                string tempExportingFilePath = Path.Combine(_tempFolder, String.Format("{0}.{1}", Guid.NewGuid(), _extensionDoc));
+                var exportContext = GetExportContext(exportParameters, document);
+
+                document.Close(false);
 
             }
             catch
             {
 
             }
+        }
+
+        private ExportContext GetExportContext(ExportParams exportParams, CadDocument document)
+        {
+            var exportedFileName = getNameExportFile(file);
+            string tempExportingFilePath = Path.Combine(_tempFolder, String.Format("{0}.{1}", Guid.NewGuid(), exportParams.extension));
+
+            var exportContext = new ExportContext(tempExportingFilePath);
+            exportContext["resolution"] = exportParams.resolution;
+
+            var pages = document.GetTFlexPagesInfo();
+
+            var selectPage = selectPages(pages, exportParams);
+
+            exportContext.Pages.AddRange(selectPage.Select(sp => sp.Index));
+            return exportContext;
         }
 
         /// <summary>
@@ -143,6 +180,23 @@ namespace ExportFiles.Handler.Exporter
             string exportedFileName = file.Name;
             exportedFileName = exportedFileName.Substring(0, exportedFileName.Length - 4);
             return exportedFileName;
+        }
+
+        private HashSet<TFlexPageInfo> selectPages(TFlexPageInfo[] flexPages, ExportParams exportParams)
+        {
+            var pages = new HashSet<TFlexPageInfo>();
+            foreach (TFlexPageInfo page in flexPages)
+            {
+                foreach (var namePage in exportParams.pages)
+                {
+                    if (page.Name.Contains(namePage))
+                    {
+                        pages.Add(page);
+                    }
+                }
+
+            }
+            return pages;
         }
     }
 }
