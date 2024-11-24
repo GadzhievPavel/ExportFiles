@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using TFlex.DOCs.Model;
 using TFlex.DOCs.Model.FilePreview.CADService;
 using TFlex.DOCs.Model.FilePreview.CADService.TFlexCadDocument;
+using TFlex.DOCs.Model.Macros;
 using TFlex.DOCs.Model.References.Files;
 
 namespace ExportFiles.Handler.Exporter
@@ -128,9 +129,18 @@ namespace ExportFiles.Handler.Exporter
                 }
 
                 var exportContext = GetExportContext(exportParameters, document);
+                var pathNewFile = document.Export(exportContext);
 
-                document.Close(false);
+                document.Close(exportParameters.saveChangesInLocalFile);
 
+                if (pathNewFile == null)
+                {
+                    throw new MacroException(String.Format(
+                        "Ошибка экспорта.{0}" +
+                        "При операции экспорта в '{1}' произошли следующие ошибки:{0}" +
+                        "Файл '{2}' не может быть экспортирован",
+                        Environment.NewLine, _extensionDoc, file.Name));
+                }
             }
             catch
             {
@@ -198,5 +208,16 @@ namespace ExportFiles.Handler.Exporter
             }
             return pages;
         }
-    }
+
+        /// <summary>
+        /// Загрузить экспортированный файл на сервер
+        /// </summary>
+        /// <param name="tempFilePath">Относительный путь к временному файлу</param>
+        /// <param name="parentFolderPath">Относительный путь к родительской папке</param>
+        /// <param name="grbFileObject">Объект grb файла</param>
+        /// <param name="fileName">Имя, с которым файл будет сохранен в справочник</param>
+        /// <returns>Созданный файл</returns>
+        private FileObject UploadExportFile(string tempFilePath, string parentFolderPath, FileObject grbFileObject, string fileName)
+        {
+        }
 }

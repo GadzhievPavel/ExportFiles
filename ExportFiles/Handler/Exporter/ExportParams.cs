@@ -25,6 +25,10 @@ namespace ExportFiles.Handler.Exporter
         /// </summary>
         public string code;
         /// <summary>
+        /// сохранять изменения вносимые в локальный файл
+        /// </summary>
+        public bool saveChangesInLocalFile;
+        /// <summary>
         /// расширение файла
         /// </summary>
         public string extension;
