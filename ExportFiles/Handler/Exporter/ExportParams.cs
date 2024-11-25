@@ -32,5 +32,9 @@ namespace ExportFiles.Handler.Exporter
         /// расширение файла
         /// </summary>
         public string extension;
+        /// <summary>
+        /// Временная папка для экспортированного файла
+        /// </summary>
+        public string tempExportingFilePath;
     }
 }

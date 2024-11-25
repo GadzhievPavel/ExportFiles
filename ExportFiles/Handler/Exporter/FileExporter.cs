@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TFlex.DOCs.Model;
+using TFlex.DOCs.Model.Desktop;
 using TFlex.DOCs.Model.FilePreview.CADService;
 using TFlex.DOCs.Model.FilePreview.CADService.TFlexCadDocument;
 using TFlex.DOCs.Model.Macros;
@@ -34,13 +35,14 @@ namespace ExportFiles.Handler.Exporter
         /// </summary>
         private static readonly string _tempFolder = Path.Combine(Path.GetTempPath(), "Temp DOCs", "ExportGRB");
 
-        private string _extensionDoc = "tif";
-
         private ExportParams exportParameters;
         /// <summary>
         /// провайдер для работы с CAD документом T-FLEX
         /// </summary>
         private CadDocumentProvider provider;
+
+        private FileHandler fileHandler;
+
         public FileExporter(ServerConnection connection, FileObject fileSettings, bool isNew)
         {
             this.connection = connection;
@@ -51,6 +53,7 @@ namespace ExportFiles.Handler.Exporter
                 Directory.CreateDirectory(_tempFolder);
 
             this.provider = CadDocumentProvider.Connect(connection, ".grb");
+            this.fileHandler = new FileHandler(connection);
         }
 
         public FileExporter(ServerConnection connection, bool isNew) : this(connection, null, isNew)
@@ -70,7 +73,6 @@ namespace ExportFiles.Handler.Exporter
         /// <exception cref="ExportFilesException"></exception>
         public void SetSettings(FileObject config)
         {
-            LoadFileToLocalPath(config);
             var path = config.LocalPath;
             string textFromFile = null;
             using (FileStream fstream = File.OpenRead(path))
@@ -83,6 +85,8 @@ namespace ExportFiles.Handler.Exporter
             {
 
                 exportParameters = (ExportParams)JsonConvert.DeserializeObject(textFromFile);
+                string tempExportingFilePath = Path.Combine(_tempFolder, String.Format("{0}.{1}", Guid.NewGuid(), exportParameters.extension));
+                exportParameters.tempExportingFilePath = tempExportingFilePath;
             }
             catch (SystemException ex)
             {
@@ -113,7 +117,10 @@ namespace ExportFiles.Handler.Exporter
             FileObject uploadedFile = null;
             try
             {
-                LoadFileToLocalPath(file);
+                fileHandler.LoadFileToLocalPath(file);
+
+                var exportedFileName = fileHandler.getNameExportFile(file);
+
                 if (exportParameters is null)
                 {
                     throw new ExportFilesException("отсутсвуют параметры для экспорта");
@@ -128,9 +135,10 @@ namespace ExportFiles.Handler.Exporter
                         "Файл '{1}' не может быть открыт", Environment.NewLine, file.Name));
                 }
 
-                var exportContext = GetExportContext(exportParameters, document);
+                var exportContext = GetExportContext(document);
                 var pathNewFile = document.Export(exportContext);
 
+                uploadedFile = fileHandler.UploadExportFile(exportParameters.tempExportingFilePath, file.Parent.Path, exportedFileName, exportParameters, isNew);
                 document.Close(exportParameters.saveChangesInLocalFile);
 
                 if (pathNewFile == null)
@@ -139,57 +147,35 @@ namespace ExportFiles.Handler.Exporter
                         "Ошибка экспорта.{0}" +
                         "При операции экспорта в '{1}' произошли следующие ошибки:{0}" +
                         "Файл '{2}' не может быть экспортирован",
-                        Environment.NewLine, _extensionDoc, file.Name));
+                        Environment.NewLine, exportParameters.extension, file.Name));
                 }
-            }
-            catch
-            {
+
 
             }
+            catch (SystemException ex)
+            {
+                throw new ExportFilesException(ex);
+            }
+            finally
+            {
+                
+            }
+
+            return uploadedFile;
         }
 
-        private ExportContext GetExportContext(ExportParams exportParams, CadDocument document)
-        {
-            var exportedFileName = getNameExportFile(file);
-            string tempExportingFilePath = Path.Combine(_tempFolder, String.Format("{0}.{1}", Guid.NewGuid(), exportParams.extension));
 
-            var exportContext = new ExportContext(tempExportingFilePath);
-            exportContext["resolution"] = exportParams.resolution;
+        private ExportContext GetExportContext( CadDocument document)
+        {
+            var exportContext = new ExportContext(exportParameters.tempExportingFilePath);
+            exportContext["resolution"] = exportParameters.resolution;
 
             var pages = document.GetTFlexPagesInfo();
 
-            var selectPage = selectPages(pages, exportParams);
+            var selectPage = selectPages(pages, exportParameters);
 
             exportContext.Pages.AddRange(selectPage.Select(sp => sp.Index));
             return exportContext;
-        }
-
-        /// <summary>
-        /// Загрузка файлов в локальную папку
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        private bool LoadFileToLocalPath(FileObject file)
-        {
-            // Получаем последнюю версию файла
-            file.GetHeadRevision();
-
-            if (file.Size == 0)
-            {
-                throw new FileSizeException($"Файл '{file}' не содержит данных");
-            }
-
-            if (File.Exists(file.LocalPath))
-                return true;
-
-            throw new LoadLocalFileException($"Ошибка загрузки файла '{file}'");
-        }
-
-        private string getNameExportFile(FileObject file)
-        {
-            string exportedFileName = file.Name;
-            exportedFileName = exportedFileName.Substring(0, exportedFileName.Length - 4);
-            return exportedFileName;
         }
 
         private HashSet<TFlexPageInfo> selectPages(TFlexPageInfo[] flexPages, ExportParams exportParams)
@@ -209,15 +195,8 @@ namespace ExportFiles.Handler.Exporter
             return pages;
         }
 
-        /// <summary>
-        /// Загрузить экспортированный файл на сервер
-        /// </summary>
-        /// <param name="tempFilePath">Относительный путь к временному файлу</param>
-        /// <param name="parentFolderPath">Относительный путь к родительской папке</param>
-        /// <param name="grbFileObject">Объект grb файла</param>
-        /// <param name="fileName">Имя, с которым файл будет сохранен в справочник</param>
-        /// <returns>Созданный файл</returns>
-        private FileObject UploadExportFile(string tempFilePath, string parentFolderPath, FileObject grbFileObject, string fileName)
-        {
-        }
+       
+
+        
+    }
 }
