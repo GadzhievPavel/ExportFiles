@@ -10,45 +10,48 @@
 
 namespace TFlex.DOCs.References.Configurations
 {
-	using System;
-	using TFlex.DOCs.Model.References;
-	using TFlex.DOCs.Model.Structure;
-	using TFlex.DOCs.Model.References.Links;
-	using TFlex.DOCs.Model.Classes;
-	using TFlex.DOCs.Model.Parameters;
-	
-	
-	/// <summary>
-	/// Представляет объект "Конфигурация" справочника "Конфигурационный справочник" или порождённый от него
-	/// </summary>
-	public partial class ConfigReferenceObject
-	{
-		
-		internal ConfigReferenceObject(ConfigurationsReference reference) : 
-				base(reference)
-		{
-		}
-		
-		/// <summary>
-		/// Возвращает параметр "Наименование"
-		/// </summary>
-		public StringParameter Name
-		{
-			get
-			{
-				return ((StringParameter)(this[FieldKeys.Name]));
-			}
-		}
-		
-		/// <summary>
-		/// Возвращает параметр "Описание"
-		/// </summary>
-		public StringParameter Description
-		{
-			get
-			{
-				return ((StringParameter)(this[FieldKeys.Description]));
-			}
-		}
-	}
+    using System;
+    using TFlex.DOCs.Model.References;
+    using TFlex.DOCs.Model.Structure;
+    using TFlex.DOCs.Model.References.Links;
+    using TFlex.DOCs.Model.Classes;
+    using TFlex.DOCs.Model.Parameters;
+    using System.Collections.Generic;
+    using System.Linq;
+
+
+    /// <summary>
+    /// Представляет объект "Конфигурация" справочника "Конфигурационный справочник" или порождённый от него
+    /// </summary>
+    public partial class ConfigReferenceObject
+    {
+
+        internal ConfigReferenceObject(ConfigurationsReference reference) :
+                base(reference)
+        {
+            
+        }
+
+        /// <summary>
+        /// Возвращает параметр "Наименование"
+        /// </summary>
+        public StringParameter Name
+        {
+            get
+            {
+                return ((StringParameter)(this[FieldKeys.Name]));
+            }
+        }
+
+        /// <summary>
+        /// Возвращает параметр "Описание"
+        /// </summary>
+        public StringParameter Description
+        {
+            get
+            {
+                return ((StringParameter)(this[FieldKeys.Description]));
+            }
+        }
+    }
 }

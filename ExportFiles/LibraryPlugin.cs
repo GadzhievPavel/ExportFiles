@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TFlex.DOCs.Model;
 using TFlex.DOCs.Model.Plugins;
 using TFlex.DOCs.Model.References;
+using TFlex.DOCs.References.Configurations;
 using TFlex.PdmFramework.Resolve;
 
 namespace ExportFiles
@@ -22,6 +24,7 @@ namespace ExportFiles
         public void RegisterPlugin()
         {
             AssemblyResolver.Instance.AddDirectory(@"C:\Program Files (x86)\T-FLEX DOCs 17\Program");
+            ReferenceCatalog.RegisterSpecialReference(ConfigurationsReference.ReferenceId, new ConfigurationsReference.Factory()); 
         }
     }
 }
