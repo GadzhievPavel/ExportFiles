@@ -11,6 +11,9 @@ using TFlex.DOCs.Model;
 
 namespace ExportFiles.Handler.Exporter
 {
+    /// <summary>
+    /// Класс для работы с файлами
+    /// </summary>
     public class FileHandler
     {
         private ServerConnection connection;

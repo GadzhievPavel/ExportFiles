@@ -119,7 +119,8 @@ namespace ExportFiles.Handler.Exporter
             {
                 fileHandler.LoadFileToLocalPath(file);
 
-                var exportedFileName = fileHandler.getNameExportFile(file);
+                
+                var exportedFileName = Path.GetFileNameWithoutExtension(file.Name);
 
                 if (exportParameters is null)
                 {
