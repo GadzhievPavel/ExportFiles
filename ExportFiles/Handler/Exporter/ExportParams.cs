@@ -9,10 +9,6 @@ namespace ExportFiles.Handler.Exporter
     public class ExportParams
     {
         /// <summary>
-        /// Тип документа
-        /// </summary>
-        public string typeDocument;
-        /// <summary>
         /// расширение
         /// </summary>
         public int resolution;

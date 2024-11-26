@@ -53,10 +53,12 @@ namespace ExportFiles.Handler.Exporter
         /// <param name="exportParams">набор настроек</param>
         /// <param name="isNewFile">загружается новый файл или обновляется имеющийся</param>
         /// <returns>Созданный файл</returns>
-        public FileObject UploadExportFile(string tempFilePath, string parentFolderPath, string fileName, ExportParams exportParams, bool isNewFile)
+        public FileObject UploadExportFile(string tempFilePath, string parentFolderPath, bool isNewFile)
         {
+            string fileName = Path.GetFileName(tempFilePath);
             try
             {
+
                 var fileReference = new FileReference(connection)
                 {
                     LoadSettings = { LoadDeleted = true }
@@ -67,25 +69,23 @@ namespace ExportFiles.Handler.Exporter
 
                 parentFolder.Children.Load();
 
-                var uploadingFileName = String.Format("{0}.{1}", fileName, exportParams.extension);
-
                 var exportedFile = parentFolder.Children.AsList
-                    .FirstOrDefault(child => child.IsFile && child.Name.Value == uploadingFileName) as FileObject;
+                    .FirstOrDefault(child => child.IsFile && child.Name.Value == fileName) as FileObject;
 
                 if (exportedFile is null)
                 {
-                    var fileType = fileReference.Classes.GetFileTypeByExtension(exportParams.extension);
+                    var fileType = fileReference.Classes.GetFileTypeByExtension(Path.GetExtension(fileName));
                     exportedFile = parentFolder.CreateFile(
                         tempFilePath,
                         String.Empty,
-                        uploadingFileName,
+                        fileName,
                         fileType);
                 }
                 else
                 {
                     if (isNewFile)
                     {
-                        var fileType = fileReference.Classes.GetFileTypeByExtension(exportParams.extension);
+                        var fileType = fileReference.Classes.GetFileTypeByExtension(Path.GetExtension(fileName));
                         exportedFile = parentFolder.CreateFile(
                             tempFilePath,
                             String.Empty,

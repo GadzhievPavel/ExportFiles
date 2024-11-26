@@ -72,6 +72,46 @@
     <Compile Include="Handler\ExportFilesGrbToTif.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="Handler\IExport.cs" />
+    <Compile Include="Handler\Model\API\ArrayReferenceObject.cs" />
+    <Compile Include="Handler\Model\API\ArrayReferenceObject.designer.cs">
+      <DependentUpon>ArrayReferenceObject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handler\Model\API\ConfigReferenceObject.cs" />
+    <Compile Include="Handler\Model\API\ConfigReferenceObject.designer.cs">
+      <DependentUpon>ConfigReferenceObject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handler\Model\API\ConfigurationsReference.cs" />
+    <Compile Include="Handler\Model\API\ConfigurationsReference.designer.cs">
+      <DependentUpon>ConfigurationsReference.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handler\Model\API\ConfigurationsReferenceObject.cs" />
+    <Compile Include="Handler\Model\API\ConfigurationsReferenceObject.designer.cs">
+      <DependentUpon>ConfigurationsReferenceObject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handler\Model\API\ConfigurationsType.cs" />
+    <Compile Include="Handler\Model\API\ConfigurationsType.designer.cs">
+      <DependentUpon>ConfigurationsType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handler\Model\API\ConfigurationsTypes.cs" />
+    <Compile Include="Handler\Model\API\ConfigurationsTypes.designer.cs">
+      <DependentUpon>ConfigurationsTypes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handler\Model\API\LogicalParameterConfigReferenceObject.cs" />
+    <Compile Include="Handler\Model\API\LogicalParameterConfigReferenceObject.designer.cs">
+      <DependentUpon>LogicalParameterConfigReferenceObject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handler\Model\API\NumberParameterConfigReferenceObject.cs" />
+    <Compile Include="Handler\Model\API\NumberParameterConfigReferenceObject.designer.cs">
+      <DependentUpon>NumberParameterConfigReferenceObject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handler\Model\API\ParameterReferenceObject.cs" />
+    <Compile Include="Handler\Model\API\ParameterReferenceObject.designer.cs">
+      <DependentUpon>ParameterReferenceObject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Handler\Model\API\StringlParameterConfigReferenceObject.cs" />
+    <Compile Include="Handler\Model\API\StringlParameterConfigReferenceObject.designer.cs">
+      <DependentUpon>StringlParameterConfigReferenceObject.cs</DependentUpon>
+    </Compile>
     <Compile Include="Handler\Model\At3bootNomenclatureObject.cs" />
     <Compile Include="Handler\Model\GroupDrawing.cs" />
     <Compile Include="Handler\NotificationModificationsExportNomenclature.cs" />

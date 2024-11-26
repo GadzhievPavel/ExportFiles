@@ -1,0 +1,1 @@
+namespace TFlex.DOCs.References.Configurations{	using System;	using TFlex.DOCs.Model.References;	using TFlex.DOCs.Model.Structure;	using TFlex.DOCs.Model.Classes;			public partial class ConfigurationsTypes : SpecialClassTree<ConfigurationsType>	{	}}

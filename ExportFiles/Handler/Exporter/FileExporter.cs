@@ -139,7 +139,7 @@ namespace ExportFiles.Handler.Exporter
                 var exportContext = GetExportContext(document);
                 var pathNewFile = document.Export(exportContext);
 
-                uploadedFile = fileHandler.UploadExportFile(exportParameters.tempExportingFilePath, file.Parent.Path, exportedFileName, exportParameters, isNew);
+                uploadedFile = fileHandler.UploadExportFile(exportParameters.tempExportingFilePath, file.Parent.Path, isNew);
                 document.Close(exportParameters.saveChangesInLocalFile);
 
                 if (pathNewFile == null)
