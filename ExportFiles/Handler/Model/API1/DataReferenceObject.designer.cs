@@ -19,12 +19,12 @@ namespace TFlex.DOCs.References.Configurations
 	
 	
 	/// <summary>
-	/// Представляет объект "Массив" справочника "Конфигурационный справочник" или порождённый от него
+	/// Представляет объект "Данные" справочника "Конфигурационный справочник" или порождённый от него
 	/// </summary>
-	public partial class ArrayReferenceObject
+	public partial class DataReferenceObject
 	{
 		
-		internal ArrayReferenceObject(ConfigurationsReference reference) : 
+		internal DataReferenceObject(ConfigurationsReference reference) : 
 				base(reference)
 		{
 		}

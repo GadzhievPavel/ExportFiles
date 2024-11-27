@@ -59,17 +59,17 @@ namespace TFlex.DOCs.References.Configurations
 			/// <summary>
 			/// Представляет уникальный идентификатор (GUID) параметра "Значение"
 			/// </summary>
-		   public static readonly Guid ValueBool = new Guid("d403fd87-f975-424f-8c33-5fd45727bfc3");
+		   public static readonly Guid ValueBool = new Guid("b628c9ec-7748-45be-8461-6d2be8deadc8");
 
 			/// <summary>
 			/// Представляет уникальный идентификатор (GUID) параметра "Значение"
 			/// </summary>
-		   public static readonly Guid ValueString = new Guid("63340008-c691-4389-9225-ab639dbb6bef");
+		   public static readonly Guid ValueString = new Guid("a935ad7b-6235-408f-8c57-9ac777d3f9fe");
 
 			/// <summary>
 			/// Представляет уникальный идентификатор (GUID) параметра "Значение"
 			/// </summary>
-		   public static readonly Guid ValueNumber = new Guid("3954493c-2104-44d2-8094-efad929d6327");
+		   public static readonly Guid ValueDouble = new Guid("c32bf299-3c17-4835-8bf6-dd9c42c387e3");
 
 		}
 	}

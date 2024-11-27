@@ -59,29 +59,33 @@ namespace TFlex.DOCs.References.Configurations
 			{
 				return null;
 			}
-			if (type.IsNumberParameterConfig)
-			{
-				return new NumberParameterConfigReferenceObject(this);
-			}
-			if (type.IsStringlParameterConfig)
-			{
-				return new StringlParameterConfigReferenceObject(this);
-			}
-			if (type.IsLogicalParameterConfig)
-			{
-				return new LogicalParameterConfigReferenceObject(this);
-			}
-			if (type.IsParameterConfig)
-			{
-				return new ParameterReferenceObject(this);
-			}
-			if (type.IsArrayConfig)
-			{
-				return new ArrayReferenceObject(this);
-			}
 			if (type.IsConfig)
 			{
 				return new ConfigReferenceObject(this);
+			}
+			if (type.IsNumber)
+			{
+				return new NumberReferenceObject(this);
+			}
+			if (type.IsString)
+			{
+				return new StringReferenceObject(this);
+			}
+			if (type.IsBool)
+			{
+				return new BoolReferenceObject(this);
+			}
+			if (type.IsParameter)
+			{
+				return new ParameterReferenceObject(this);
+			}
+			if (type.IsArray)
+			{
+				return new ArrayReferenceObject(this);
+			}
+			if (type.IsData)
+			{
+				return new DataReferenceObject(this);
 			}
 			return new ConfigurationsReferenceObject(this);
 		}

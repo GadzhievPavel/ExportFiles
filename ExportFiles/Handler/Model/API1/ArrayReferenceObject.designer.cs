@@ -19,25 +19,14 @@ namespace TFlex.DOCs.References.Configurations
 	
 	
 	/// <summary>
-	/// Представляет объект "Числовой" справочника "Конфигурационный справочник" или порождённый от него
+	/// Представляет объект "Массив" справочника "Конфигурационный справочник" или порождённый от него
 	/// </summary>
-	public partial class NumberParameterConfigReferenceObject
+	public partial class ArrayReferenceObject
 	{
 		
-		internal NumberParameterConfigReferenceObject(ConfigurationsReference reference) : 
+		internal ArrayReferenceObject(ConfigurationsReference reference) : 
 				base(reference)
 		{
-		}
-		
-		/// <summary>
-		/// Возвращает параметр "Значение"
-		/// </summary>
-		public DoubleParameter ValueNumber
-		{
-			get
-			{
-				return ((DoubleParameter)(this[FieldKeys.ValueNumber]));
-			}
 		}
 	}
 }

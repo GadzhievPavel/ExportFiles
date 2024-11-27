@@ -28,6 +28,72 @@ namespace TFlex.DOCs.References.Configurations
 		}
 		
 		/// <summary>
+		/// Возвращает описание типа объектов "Данные"
+		/// </summary>
+		public ConfigurationsType Data
+		{
+			get
+			{
+				return Find(Keys.Data);
+			}
+		}
+		
+		/// <summary>
+		/// Возвращает описание типа объектов "Массив"
+		/// </summary>
+		public ConfigurationsType Array
+		{
+			get
+			{
+				return Find(Keys.Array);
+			}
+		}
+		
+		/// <summary>
+		/// Возвращает описание типа объектов "Параметр"
+		/// </summary>
+		public ConfigurationsType Parameter
+		{
+			get
+			{
+				return Find(Keys.Parameter);
+			}
+		}
+		
+		/// <summary>
+		/// Возвращает описание типа объектов "Логический"
+		/// </summary>
+		public ConfigurationsType Bool
+		{
+			get
+			{
+				return Find(Keys.Bool);
+			}
+		}
+		
+		/// <summary>
+		/// Возвращает описание типа объектов "Строка"
+		/// </summary>
+		public ConfigurationsType String
+		{
+			get
+			{
+				return Find(Keys.String);
+			}
+		}
+		
+		/// <summary>
+		/// Возвращает описание типа объектов "Число"
+		/// </summary>
+		public ConfigurationsType Number
+		{
+			get
+			{
+				return Find(Keys.Number);
+			}
+		}
+		
+		/// <summary>
 		/// Возвращает описание типа объектов "Конфигурация"
 		/// </summary>
 		public ConfigurationsType Config
@@ -35,61 +101,6 @@ namespace TFlex.DOCs.References.Configurations
 			get
 			{
 				return Find(Keys.Config);
-			}
-		}
-		
-		/// <summary>
-		/// Возвращает описание типа объектов "Массив"
-		/// </summary>
-		public ConfigurationsType ArrayConfig
-		{
-			get
-			{
-				return Find(Keys.ArrayConfig);
-			}
-		}
-		
-		/// <summary>
-		/// Возвращает описание типа объектов "Параметр"
-		/// </summary>
-		public ConfigurationsType ParameterConfig
-		{
-			get
-			{
-				return Find(Keys.ParameterConfig);
-			}
-		}
-		
-		/// <summary>
-		/// Возвращает описание типа объектов "Логический"
-		/// </summary>
-		public ConfigurationsType LogicalParameterConfig
-		{
-			get
-			{
-				return Find(Keys.LogicalParameterConfig);
-			}
-		}
-		
-		/// <summary>
-		/// Возвращает описание типа объектов "Строковый"
-		/// </summary>
-		public ConfigurationsType StringlParameterConfig
-		{
-			get
-			{
-				return Find(Keys.StringlParameterConfig);
-			}
-		}
-		
-		/// <summary>
-		/// Возвращает описание типа объектов "Числовой"
-		/// </summary>
-		public ConfigurationsType NumberParameterConfig
-		{
-			get
-			{
-				return Find(Keys.NumberParameterConfig);
 			}
 		}
 		
@@ -105,34 +116,39 @@ namespace TFlex.DOCs.References.Configurations
 		{
 			
 			/// <summary>
-			/// Представляет уникальный идентификатор (GUID) типа "Конфигурация"
+			/// Представляет уникальный идентификатор (GUID) типа "Данные"
 			/// </summary>
-		   public static readonly Guid Config = new Guid("cb4be044-cd5f-4263-ad00-d7dd4c4121e5");
+		   public static readonly Guid Data = new Guid("6c75986a-b51c-432f-b8fc-ad5c55dab7e1");
 
 			/// <summary>
 			/// Представляет уникальный идентификатор (GUID) типа "Массив"
 			/// </summary>
-		   public static readonly Guid ArrayConfig = new Guid("c8f0cc92-59ea-45d1-9bb0-9ba3d9fc68e5");
+		   public static readonly Guid Array = new Guid("38062a01-fcd3-4aa0-bcb3-eeb3dec3f4fd");
 
 			/// <summary>
 			/// Представляет уникальный идентификатор (GUID) типа "Параметр"
 			/// </summary>
-		   public static readonly Guid ParameterConfig = new Guid("ec5bcd76-e7ef-4905-a7ef-cdb24954028f");
+		   public static readonly Guid Parameter = new Guid("74681110-51bf-401d-9d69-640de7d51a9f");
 
 			/// <summary>
 			/// Представляет уникальный идентификатор (GUID) типа "Логический"
 			/// </summary>
-		   public static readonly Guid LogicalParameterConfig = new Guid("5e58c329-a4f6-4f1a-a6b7-1e4c1f825770");
+		   public static readonly Guid Bool = new Guid("d0769f21-2ab0-47f6-814a-840cd53270b3");
 
 			/// <summary>
-			/// Представляет уникальный идентификатор (GUID) типа "Строковый"
+			/// Представляет уникальный идентификатор (GUID) типа "Строка"
 			/// </summary>
-		   public static readonly Guid StringlParameterConfig = new Guid("3ef5aa8a-3551-4575-af01-80460dd5a309");
+		   public static readonly Guid String = new Guid("7b9386cc-0dad-47c8-afb1-7c15bd34fca3");
 
 			/// <summary>
-			/// Представляет уникальный идентификатор (GUID) типа "Числовой"
+			/// Представляет уникальный идентификатор (GUID) типа "Число"
 			/// </summary>
-		   public static readonly Guid NumberParameterConfig = new Guid("61f3d71f-6c90-41d2-b193-dbecca58879f");
+		   public static readonly Guid Number = new Guid("6003ab2b-e233-4af3-af95-a0860b38d9cd");
+
+			/// <summary>
+			/// Представляет уникальный идентификатор (GUID) типа "Конфигурация"
+			/// </summary>
+		   public static readonly Guid Config = new Guid("cb4be044-cd5f-4263-ad00-d7dd4c4121e5");
 
 		}
 	}

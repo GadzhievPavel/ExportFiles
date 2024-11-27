@@ -38,6 +38,72 @@ namespace TFlex.DOCs.References.Configurations
 		}
 		
 		/// <summary>
+		/// Возвращает true, если текущий экземпляр описывает тип "Данные" или порождён от него
+		/// </summary>
+		public bool IsData
+		{
+			get
+			{
+				return IsInherit(ConfigurationsTypes.Keys.Data);
+			}
+		}
+		
+		/// <summary>
+		/// Возвращает true, если текущий экземпляр описывает тип "Массив" или порождён от него
+		/// </summary>
+		public bool IsArray
+		{
+			get
+			{
+				return IsInherit(ConfigurationsTypes.Keys.Array);
+			}
+		}
+		
+		/// <summary>
+		/// Возвращает true, если текущий экземпляр описывает тип "Параметр" или порождён от него
+		/// </summary>
+		public bool IsParameter
+		{
+			get
+			{
+				return IsInherit(ConfigurationsTypes.Keys.Parameter);
+			}
+		}
+		
+		/// <summary>
+		/// Возвращает true, если текущий экземпляр описывает тип "Логический" или порождён от него
+		/// </summary>
+		public bool IsBool
+		{
+			get
+			{
+				return IsInherit(ConfigurationsTypes.Keys.Bool);
+			}
+		}
+		
+		/// <summary>
+		/// Возвращает true, если текущий экземпляр описывает тип "Строка" или порождён от него
+		/// </summary>
+		public bool IsString
+		{
+			get
+			{
+				return IsInherit(ConfigurationsTypes.Keys.String);
+			}
+		}
+		
+		/// <summary>
+		/// Возвращает true, если текущий экземпляр описывает тип "Число" или порождён от него
+		/// </summary>
+		public bool IsNumber
+		{
+			get
+			{
+				return IsInherit(ConfigurationsTypes.Keys.Number);
+			}
+		}
+		
+		/// <summary>
 		/// Возвращает true, если текущий экземпляр описывает тип "Конфигурация" или порождён от него
 		/// </summary>
 		public bool IsConfig
@@ -45,61 +111,6 @@ namespace TFlex.DOCs.References.Configurations
 			get
 			{
 				return IsInherit(ConfigurationsTypes.Keys.Config);
-			}
-		}
-		
-		/// <summary>
-		/// Возвращает true, если текущий экземпляр описывает тип "Массив" или порождён от него
-		/// </summary>
-		public bool IsArrayConfig
-		{
-			get
-			{
-				return IsInherit(ConfigurationsTypes.Keys.ArrayConfig);
-			}
-		}
-		
-		/// <summary>
-		/// Возвращает true, если текущий экземпляр описывает тип "Параметр" или порождён от него
-		/// </summary>
-		public bool IsParameterConfig
-		{
-			get
-			{
-				return IsInherit(ConfigurationsTypes.Keys.ParameterConfig);
-			}
-		}
-		
-		/// <summary>
-		/// Возвращает true, если текущий экземпляр описывает тип "Логический" или порождён от него
-		/// </summary>
-		public bool IsLogicalParameterConfig
-		{
-			get
-			{
-				return IsInherit(ConfigurationsTypes.Keys.LogicalParameterConfig);
-			}
-		}
-		
-		/// <summary>
-		/// Возвращает true, если текущий экземпляр описывает тип "Строковый" или порождён от него
-		/// </summary>
-		public bool IsStringlParameterConfig
-		{
-			get
-			{
-				return IsInherit(ConfigurationsTypes.Keys.StringlParameterConfig);
-			}
-		}
-		
-		/// <summary>
-		/// Возвращает true, если текущий экземпляр описывает тип "Числовой" или порождён от него
-		/// </summary>
-		public bool IsNumberParameterConfig
-		{
-			get
-			{
-				return IsInherit(ConfigurationsTypes.Keys.NumberParameterConfig);
 			}
 		}
 	}
