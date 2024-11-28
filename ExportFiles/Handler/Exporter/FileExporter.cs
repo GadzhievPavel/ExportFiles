@@ -57,24 +57,14 @@ namespace ExportFiles.Handler.Exporter
             this.fileHandler = new FileHandler(connection);
         }
 
-        public FileExporter(ServerConnection connection, bool isNew) : this(connection, null, isNew)
-        {
-
-        }
-
-        public FileExporter(ServerConnection connection) : this(connection, null, false)
-        {
-
-        }
-
         /// <summary>
         /// Чтение конфига для эксплорта
         /// </summary>
         /// <param name="config"></param>
         /// <exception cref="ExportFilesException"></exception>
-        public void SetSettings(string nameConfig)
+        private void SetSettings(string nameConfig)
         {
-            var configReference = new ConfigurationsReference(connection);
+            var configReference = new ConfigurationsReference(this.connection);
             var config = configReference.FindConfig(nameConfig);
 
             this.exportParameters = new ExportParams(config.getParameters());
@@ -107,6 +97,12 @@ namespace ExportFiles.Handler.Exporter
             }
         }
 
+        /// <summary>
+        /// Экспортировать файл
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ExportFilesException"></exception>
+        /// <exception cref="MacroException"></exception>
         public FileObject Export()
         {
             FileObject uploadedFile = null;
@@ -190,9 +186,5 @@ namespace ExportFiles.Handler.Exporter
             }
             return pages;
         }
-
-       
-
-        
     }
 }
