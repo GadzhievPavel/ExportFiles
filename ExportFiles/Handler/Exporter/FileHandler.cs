@@ -49,8 +49,6 @@ namespace ExportFiles.Handler.Exporter
         /// </summary>
         /// <param name="tempFilePath">Относительный путь к временному файлу</param>
         /// <param name="parentFolderPath">родительская папка куда загружать</param>
-        /// <param name="fileName">название загружаемого файла</param>
-        /// <param name="exportParams">набор настроек</param>
         /// <param name="isNewFile">загружается новый файл или обновляется имеющийся</param>
         /// <returns>Созданный файл</returns>
         public FileObject UploadExportFile(string tempFilePath, string parentFolderPath, bool isNewFile)
@@ -115,7 +113,75 @@ namespace ExportFiles.Handler.Exporter
 
 
         }
+        /// <summary>
+        /// Загрузка в T-FLEX файла с указанным именем
+        /// </summary>
+        /// <param name="tempFilePath"></param>
+        /// <param name="nameNewFile"></param>
+        /// <param name="parentFolderPath"></param>
+        /// <param name="isNewFile"></param>
+        /// <returns></returns>
+        public FileObject UploadExportFile(string tempFilePath, string nameNewFile, string parentFolderPath, bool isNewFile)
+        {
+            string fileName = Path.GetFileName(tempFilePath);
+            try
+            {
 
+                var fileReference = new FileReference(connection)
+                {
+                    LoadSettings = { LoadDeleted = true }
+                };
+                var parentFolder = (FolderObject)fileReference.FindByRelativePath(parentFolderPath);
+                if (parentFolder == null)
+                    throw new MacroException(String.Format("Не найдена родительская папка с именем '{0}'", parentFolderPath));
+
+                parentFolder.Children.Load();
+
+                var exportedFile = parentFolder.Children.AsList
+                    .FirstOrDefault(child => child.IsFile && child.Name.Value == fileName) as FileObject;
+
+                if (exportedFile is null)
+                {
+                    var fileType = fileReference.Classes.GetFileTypeByExtension(Path.GetExtension(fileName));
+                    exportedFile = parentFolder.CreateFile(
+                        tempFilePath,
+                        String.Empty,
+                        fileName,
+                        fileType);
+                }
+                else
+                {
+                    if (isNewFile)
+                    {
+                        var fileType = fileReference.Classes.GetFileTypeByExtension(Path.GetExtension(fileName));
+                        exportedFile = parentFolder.CreateFile(
+                            tempFilePath,
+                            String.Empty,
+                            GetUniqueFileName(parentFolder, fileName),
+                            fileType);
+                    }
+                    else
+                    {
+                        if (!exportedFile.IsCheckedOutByCurrentUser)
+                            Desktop.CheckOut(exportedFile, false);
+
+                        File.Copy(tempFilePath, exportedFile.LocalPath, true);
+                    }
+                }
+
+                return exportedFile;
+
+            }
+            catch (SystemException e)
+            {
+                string exceptionMessage = String.Format(
+                    "Ошибка загрузки файла на сервер.{0}" +
+                    "При операции загрузки файла на сервер произошли следующие ошибки:{0}{1}",
+                    Environment.NewLine, e.Message);
+                throw new MacroException(exceptionMessage, e);
+            }
+
+        }
         /// <summary>
         /// проверка имени на уникальность
         /// </summary>

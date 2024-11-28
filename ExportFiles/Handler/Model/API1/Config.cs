@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TFlex.DOCs.Model.Plugins;
 using TFlex.DOCs.References.Configurations;
 
 namespace ExportFiles.Handler.Model.API1
@@ -17,8 +18,12 @@ namespace ExportFiles.Handler.Model.API1
 
         public dynamic Get(string key)
         {
-            dict.TryGetValue(key, out var value);
-            return value.GetValue();
+            dict.TryGetValue(key, out DataReferenceObject val);
+            if(val is null)
+            {
+                throw new ArgumentNullException($"ключ {key} отсутствует в конфиге");
+            }
+            return val.GetValue();
         }
 
         public dynamic this[string key]

@@ -13,7 +13,7 @@ namespace ExportFiles.Handler.Exporter
         public ExportParams(Config config)
         {
             this.resolution = config["Resolution"];
-            this.code = config["code"];
+            this.code = config["Code"];
             this.saveChangesInLocalFile = config["SaveChangesInLocalFile"];
             this.extension = config["Extension"];
             this.tempExportingFilePath = config["TempExportingFilePath"];
@@ -23,7 +23,7 @@ namespace ExportFiles.Handler.Exporter
         /// <summary>
         /// расширение
         /// </summary>
-        public int resolution;
+        public double resolution;
         /// <summary>
         /// странице содержат в названии
         /// </summary>

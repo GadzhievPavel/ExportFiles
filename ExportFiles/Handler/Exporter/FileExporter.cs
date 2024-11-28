@@ -95,6 +95,7 @@ namespace ExportFiles.Handler.Exporter
             {
                 throw new ExportFilesException("файл не grb формата");
             }
+            this.file = file;
         }
 
         /// <summary>
