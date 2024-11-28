@@ -19,12 +19,12 @@ namespace TFlex.DOCs.References.Configurations
 	
 	
 	/// <summary>
-	/// Представляет объект "Логический" справочника "Конфигурационный справочник" или порождённый от него
+	/// Представляет объект "Строка" справочника "Конфигурационный справочник" или порождённый от него
 	/// </summary>
-	public partial class LogicalParameterConfigReferenceObject
+	public partial class StringReferenceObject
 	{
 		
-		internal LogicalParameterConfigReferenceObject(ConfigurationsReference reference) : 
+		internal StringReferenceObject(ConfigurationsReference reference) : 
 				base(reference)
 		{
 		}
@@ -32,11 +32,11 @@ namespace TFlex.DOCs.References.Configurations
 		/// <summary>
 		/// Возвращает параметр "Значение"
 		/// </summary>
-		public BooleanParameter ValueBool
+		public StringParameter ValueString
 		{
 			get
 			{
-				return ((BooleanParameter)(this[FieldKeys.ValueBool]));
+				return ((StringParameter)(this[FieldKeys.ValueString]));
 			}
 		}
 	}

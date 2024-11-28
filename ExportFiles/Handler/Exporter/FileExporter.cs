@@ -13,6 +13,7 @@ using TFlex.DOCs.Model.FilePreview.CADService;
 using TFlex.DOCs.Model.FilePreview.CADService.TFlexCadDocument;
 using TFlex.DOCs.Model.Macros;
 using TFlex.DOCs.Model.References.Files;
+using TFlex.DOCs.References.Configurations;
 
 namespace ExportFiles.Handler.Exporter
 {
@@ -43,10 +44,10 @@ namespace ExportFiles.Handler.Exporter
 
         private FileHandler fileHandler;
 
-        public FileExporter(ServerConnection connection, FileObject fileSettings, bool isNew)
+        public FileExporter(ServerConnection connection, string nameConfig, bool isNew)
         {
             this.connection = connection;
-            SetSettings(fileSettings);
+            SetSettings(nameConfig);
             this.isNew = isNew;
 
             if (!Directory.Exists(_tempFolder))
@@ -56,35 +57,19 @@ namespace ExportFiles.Handler.Exporter
             this.fileHandler = new FileHandler(connection);
         }
 
-        public FileExporter(ServerConnection connection, bool isNew) : this(connection, null, isNew)
-        {
-
-        }
-
-        public FileExporter(ServerConnection connection) : this(connection, null, false)
-        {
-
-        }
-
         /// <summary>
         /// Чтение конфига для эксплорта
         /// </summary>
         /// <param name="config"></param>
         /// <exception cref="ExportFilesException"></exception>
-        public void SetSettings(FileObject config)
+        private void SetSettings(string nameConfig)
         {
-            var path = config.LocalPath;
-            string textFromFile = null;
-            using (FileStream fstream = File.OpenRead(path))
-            {
-                byte[] buffer = new byte[fstream.Length];
-                fstream.Read(buffer, 0, buffer.Length);
-                textFromFile = Encoding.UTF8.GetString(buffer);
-            }
+            var configReference = new ConfigurationsReference(this.connection);
+            var config = configReference.FindConfig(nameConfig);
+
+            this.exportParameters = new ExportParams(config.getParameters());
             try
             {
-
-                exportParameters = (ExportParams)JsonConvert.DeserializeObject(textFromFile);
                 string tempExportingFilePath = Path.Combine(_tempFolder, String.Format("{0}.{1}", Guid.NewGuid(), exportParameters.extension));
                 exportParameters.tempExportingFilePath = tempExportingFilePath;
             }
@@ -112,6 +97,12 @@ namespace ExportFiles.Handler.Exporter
             }
         }
 
+        /// <summary>
+        /// Экспортировать файл
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="ExportFilesException"></exception>
+        /// <exception cref="MacroException"></exception>
         public FileObject Export()
         {
             FileObject uploadedFile = null;
@@ -195,9 +186,5 @@ namespace ExportFiles.Handler.Exporter
             }
             return pages;
         }
-
-       
-
-        
     }
 }

@@ -19,35 +19,24 @@ namespace TFlex.DOCs.References.Configurations
 	
 	
 	/// <summary>
-	/// Представляет объект "Параметр" справочника "Конфигурационный справочник" или порождённый от него
+	/// Представляет объект "Число" справочника "Конфигурационный справочник" или порождённый от него
 	/// </summary>
-	public partial class ParameterReferenceObject
+	public partial class NumberReferenceObject
 	{
 		
-		internal ParameterReferenceObject(ConfigurationsReference reference) : 
+		internal NumberReferenceObject(ConfigurationsReference reference) : 
 				base(reference)
 		{
 		}
 		
 		/// <summary>
-		/// Возвращает параметр "Наименование"
+		/// Возвращает параметр "Значение"
 		/// </summary>
-		public StringParameter Name
+		public DoubleParameter ValueDouble
 		{
 			get
 			{
-				return ((StringParameter)(this[FieldKeys.Name]));
-			}
-		}
-		
-		/// <summary>
-		/// Возвращает параметр "Описание"
-		/// </summary>
-		public StringParameter Description
-		{
-			get
-			{
-				return ((StringParameter)(this[FieldKeys.Description]));
+				return ((DoubleParameter)(this[FieldKeys.ValueDouble]));
 			}
 		}
 	}

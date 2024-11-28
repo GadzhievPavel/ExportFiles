@@ -9,15 +9,14 @@ namespace TFlex.DOCs.References.Configurations{
 
     public partial class ConfigurationsReference : SpecialReference<ConfigurationsReferenceObject>
     {
-
         public partial class Factory
         {
         }
 
-        public ConfigReferenceObject FindConfig(string name)
-        {
-            return Find(
-                Filter.Parse($"[Наименование] = '{name}' И [Тип] = 'Конфигурация'",
-                this.ParameterGroup)).FirstOrDefault() as ConfigReferenceObject;
-        }
+        /// <summary>
+        /// Поиск конфигурации
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public ConfigReferenceObject FindConfig(string name)        {            return Find(                Filter.Parse($"[Наименование] = '{name}' И [Тип] = 'Конфигурация'",                this.ParameterGroup)).FirstOrDefault() as ConfigReferenceObject;        }
     }}
