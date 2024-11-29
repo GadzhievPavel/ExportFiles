@@ -123,7 +123,10 @@ namespace ExportFiles.Handler.Exporter
         /// <returns></returns>
         public FileObject UploadExportFile(string tempFilePath, string nameNewFile, string parentFolderPath, bool isNewFile)
         {
-            string fileName = Path.GetFileName(tempFilePath);
+            var nameWithExtension = Path.GetFileNameWithoutExtension(nameNewFile);
+            var extension = Path.GetExtension(tempFilePath);
+
+            string fileName = String.Concat(nameWithExtension, ".", extension);
             try
             {
 
@@ -142,7 +145,7 @@ namespace ExportFiles.Handler.Exporter
 
                 if (exportedFile is null)
                 {
-                    var fileType = fileReference.Classes.GetFileTypeByExtension(Path.GetExtension(fileName));
+                    var fileType = fileReference.Classes.GetFileTypeByExtension(extension);
                     exportedFile = parentFolder.CreateFile(
                         tempFilePath,
                         String.Empty,
@@ -153,7 +156,7 @@ namespace ExportFiles.Handler.Exporter
                 {
                     if (isNewFile)
                     {
-                        var fileType = fileReference.Classes.GetFileTypeByExtension(Path.GetExtension(fileName));
+                        var fileType = fileReference.Classes.GetFileTypeByExtension(extension);
                         exportedFile = parentFolder.CreateFile(
                             tempFilePath,
                             String.Empty,

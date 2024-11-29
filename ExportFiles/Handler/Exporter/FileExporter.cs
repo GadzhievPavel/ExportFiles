@@ -111,7 +111,7 @@ namespace ExportFiles.Handler.Exporter
             {
                 fileHandler.LoadFileToLocalPath(file);
 
-                
+
                 var exportedFileName = Path.GetFileNameWithoutExtension(file.Name);
 
                 if (exportParameters is null)
@@ -131,7 +131,7 @@ namespace ExportFiles.Handler.Exporter
                 var exportContext = GetExportContext(document);
                 var pathNewFile = document.Export(exportContext);
 
-                uploadedFile = fileHandler.UploadExportFile(exportParameters.tempExportingFilePath, file.Parent.Path, isNew);
+                uploadedFile = fileHandler.UploadExportFile(exportParameters.tempExportingFilePath, file.Name, file.Parent.Path, isNew);
                 document.Close(exportParameters.saveChangesInLocalFile);
 
                 if (pathNewFile == null)
@@ -151,14 +151,14 @@ namespace ExportFiles.Handler.Exporter
             }
             finally
             {
-                
+
             }
 
             return uploadedFile;
         }
 
 
-        private ExportContext GetExportContext( CadDocument document)
+        private ExportContext GetExportContext(CadDocument document)
         {
             var exportContext = new ExportContext(exportParameters.tempExportingFilePath);
             exportContext["resolution"] = exportParameters.resolution;
