@@ -48,28 +48,6 @@ namespace ExportFiles.Handler.CadVariables
         {
             this.data = data;
         }
-        /// <summary>
-        /// Установка в переменные подписи с файла
-        /// </summary>
-        /// <param name="file">файл оригинал grb</param>
-        /// <exception cref="LoadLocalFileException"></exception>
-        public void SetVarriables(FileObject file)
-        {
-            LoadGRBFileToLocalPath(file);
-            using (var document = provider.OpenDocument(file.LocalPath, false))
-            {
-                if (document == null)
-                    throw new LoadLocalFileException(String.Format("Файл '{0}' не может быть открыт", Path.GetFileName(file.LocalPath)));
-
-                var variables = document.GetVariables();
-
-                ///to do setVar
-                SetSignaturesVariables(file.Signatures, variables);
-
-                variables.Save();
-                document.Close(false);
-            }
-        }
 
         /// <summary>
         /// Заполнение основной надписи чертежа (Наименование/Обозначение/Основной материал(если есть))
@@ -225,28 +203,7 @@ namespace ExportFiles.Handler.CadVariables
             }
         }
 
-        /// <summary>
-        /// Метод для загрузки файла на компьютер
-        /// </summary>
-        /// <param name="file"></param>
-        /// <returns></returns>
-        /// <exception cref="FileSizeException">Файл не содержит данных</exception>
-        /// <exception cref="LoadLocalFileException">Файл не получилось загрузить</exception>
-        private bool LoadGRBFileToLocalPath(FileObject file)
-        {
-            file.GetHeadRevision();
-            if (file.Size == 0)
-            {
-                throw new FileSizeException($"Файл '{file}' не содержит данных");
-            }
-            if (File.Exists(file.LocalPath))
-            {
-                return true;
-            }
 
-            throw new LoadLocalFileException($"Ошибка загрузки файла '{file}'");
-
-        }
 
         public void SetVariables(DataVariables dataVariables, VariableCollection variables)
         {
@@ -259,9 +216,15 @@ namespace ExportFiles.Handler.CadVariables
             variables.Save();
         }
 
-        public DataVariableCad GetDataVariableCad()
+        private List<CadVariable> makeSignature(SignatureCollection signatures)
+        {
+
+        }
+
+        private DataVariableCad GetDataVariableCad()
         {
             var dataCad = new DataVariableCad();
+            var signatures = data.fileObject.Signatures;
 
         }
     }

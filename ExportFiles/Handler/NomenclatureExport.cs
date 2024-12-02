@@ -14,6 +14,7 @@ using TFlex.DOCs.Model.References;
 using TFlex.DOCs.Model.References.Documents;
 using TFlex.DOCs.Model.References.Files;
 using TFlex.DOCs.Model.References.Nomenclature;
+using static ExportFiles.Handler.Exporter.FileExporter;
 
 namespace ExportFiles
 {
@@ -132,14 +133,14 @@ namespace ExportFiles
 
         public void Export()
         {
-            
-            foreach(var pair in fileObjects)
+
+            foreach (var pair in fileObjects)
             {
                 var fileSource = pair.Value;
                 fileExporter.SetFile(fileSource);
-                var data = new DataVariables(pair.Key,fileSource);
+                var data = new DataVariables(pair.Key, fileSource);
                 ControllerVariables controllerVariables = new ControllerVariables(data);
-                fileExporter.setVariable = controllerVariables.GetDataVariableCad();
+                fileExporter.setVariable = controllerVariables.GetDataVariableCad;
                 fileExporter.Export();
             }
         }
@@ -155,7 +156,7 @@ namespace ExportFiles
                 var fileSource = pair.Value;
                 //export.SetFileObject(fileSource);
                 DataVariables dataVariables = new DataVariables();// создан объект с переменными
-                dataVariables.SetFileObject(fileSource);//
+                dataVariables.fileObject = fileSource;//
                 dataVariables.SetNomenclature(pair.Key);//
                 controllerVariables.SetVarriables(fileSource);
                 //var newFile = export.ExportToFormat(isNewFiles, dataVariables);// использован второй параметр

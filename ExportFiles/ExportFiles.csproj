@@ -38,7 +38,7 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NomenclatureExtensionLibray">
-      <HintPath>..\..\NomenclatureExtensionLibray\NomenclatureExtensionLibray\bin\Debug\NomenclatureExtensionLibray.dll</HintPath>
+      <HintPath>..\..\GadzhievPavel\NomenclatureExtensionLibray\NomenclatureExtensionLibray\bin\Debug\NomenclatureExtensionLibray.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -69,6 +69,7 @@
     <Compile Include="Handler\CadVariables\ControllerVariables.cs" />
     <Compile Include="Handler\CadVariables\DataVariables.cs" />
     <Compile Include="Handler\CadVariables\IControllerVariables.cs" />
+    <Compile Include="Handler\Exporter\CadVariable.cs" />
     <Compile Include="Handler\Exporter\DataVariableCad.cs" />
     <Compile Include="Handler\Exporter\ExportParams.cs" />
     <Compile Include="Handler\Exporter\FileExporter.cs" />

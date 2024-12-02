@@ -22,6 +22,11 @@ namespace ExportFiles.Handler.Exporter
             data[key] = value;
         }
 
+        public void Add(CadVariable cadVariable)
+        {
+            data[cadVariable.Key] = cadVariable.Value;
+        }
+
         public object this[string key]
         {
             get { return data[key]; }
