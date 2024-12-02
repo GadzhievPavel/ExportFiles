@@ -126,7 +126,7 @@ namespace ExportFiles.Handler.Exporter
             var nameWithExtension = Path.GetFileNameWithoutExtension(nameNewFile);
             var extension = Path.GetExtension(tempFilePath);
 
-            string fileName = String.Concat(nameWithExtension, ".", extension);
+            string fileName = String.Concat(nameWithExtension, extension);
             try
             {
 
