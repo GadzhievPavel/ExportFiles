@@ -1,6 +1,8 @@
 ﻿using DeveloperUtilsLibrary;
 using ExportFiles.Handler;
 using ExportFiles.Handler.CadVariables;
+using ExportFiles.Handler.Exporter;
+using NomenclatureExtensionLibray;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,13 +20,9 @@ namespace ExportFiles
     public class NomenclatureExport : IExport
     {
         /// <summary>
-        /// список номенклатуры, которую необходимо конвертировать
+        /// Экспортер подлиников
         /// </summary>
-        //private HashSet<NomenclatureObject> nomenclatures;
-        /// <summary>
-        /// Конвертер
-        /// </summary>
-        protected ExportFilesGrbToTif export;
+        private FileExporter fileExporter;
         /// <summary>
         /// коллекция разрешенных типов номенклатур для генерации подлинников
         /// </summary>
@@ -33,22 +31,11 @@ namespace ExportFiles
         /// Справочник ЭСИ
         /// </summary>
         private NomenclatureReference nomenclatureReference;
-        /// <summary>
-        /// Экспортируемые файлы
-        /// </summary>
-        //private HashSet<FileObject> files;
 
         /// <summary>
         /// Набор пар номенклатура-файл
         /// </summary>
         protected Dictionary<NomenclatureObject, FileObject> fileObjects;
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="nomenclatures">список экспортируемой номенклатуры</param>
-        /// <param name="types">разрешенные для конвертации типы</param>
-        /// <param name="connection">соединение сервера</param>
-        ///
 
         private StageController stageController;
 
@@ -58,25 +45,22 @@ namespace ExportFiles
             this.nomenclatureReference = new NomenclatureReference(connection);
             this.enabledClassesObjectsNomenclature = types;
             this.fileObjects = new Dictionary<NomenclatureObject, FileObject>();
-            //this.nomenclatures = new HashSet<NomenclatureObject>();
-            //files = new HashSet<FileObject>();
+
             foreach (var nom in nomenclatures)
             {
                 AddNomenclature(nom);
             }
-            this.export = new ExportFilesGrbToTif(connection);
+
             this.stageController = new StageController(connection);
             this.controllerVariables = new ControllerVariables(connection);
         }
 
-        public NomenclatureExport(ServerConnection connection)
+        public NomenclatureExport(ServerConnection connection, string nameConfig, bool isNewFile)
         {
+            this.fileExporter = new FileExporter(connection, nameConfig, isNewFile);
             this.enabledClassesObjectsNomenclature = new HashSet<NomenclatureType> { };
             this.nomenclatureReference = new NomenclatureReference(connection);
             this.fileObjects = new Dictionary<NomenclatureObject, FileObject> { };
-            //this.nomenclatures = new HashSet<NomenclatureObject> { };
-            this.export = new ExportFilesGrbToTif(connection);
-            //files = new HashSet<FileObject>();
             this.stageController = new StageController(connection);
             this.controllerVariables = new ControllerVariables(connection);
         }
@@ -111,31 +95,20 @@ namespace ExportFiles
             {
                 return;
             }
-            var file = HaveGRBFile(nomenclature);
-            if (file is null)
+            var files = nomenclature.GetFiles("grb");
+            if (files is null)
             {
                 return;
             }
-            if (!fileObjects.Keys.Contains(nomenclature) && !fileObjects.Values.Contains(file))
+            foreach (var file in files)
             {
-                fileObjects.Add(nomenclature, file);
+                if (!fileObjects.Keys.Contains(nomenclature) && !fileObjects.Values.Contains(file))
+                {
+                    fileObjects.Add(nomenclature, file);
+                }
             }
         }
 
-        /// <summary>
-        /// Проверка на наличие файлов
-        /// </summary>
-        /// <param name="nomenclature"></param>
-        /// <returns>grb файл исходника</returns>
-        public FileObject HaveGRBFile(NomenclatureObject nomenclature)
-        {
-            var document = nomenclature.LinkedObject as EngineeringDocumentObject;
-            if (document is null)
-            {
-                return null;
-            }
-            return document.GetFiles().Where(file => file.Class.Extension.ToLower().Equals("grb")).FirstOrDefault();
-        }
         /// <summary>
         /// Проверка номенклатуры на возможность конвертации
         /// </summary>
@@ -157,6 +130,20 @@ namespace ExportFiles
             return enabledClassesObjectsNomenclature.Contains(nomenclature.Class);
         }
 
+        public void Export()
+        {
+            
+            foreach(var pair in fileObjects)
+            {
+                var fileSource = pair.Value;
+                fileExporter.SetFile(fileSource);
+                var data = new DataVariables(pair.Key,fileSource);
+                ControllerVariables controllerVariables = new ControllerVariables(data);
+                fileExporter.setVariable = controllerVariables.GetDataVariableCad();
+                fileExporter.Export();
+            }
+        }
+
         /// <summary>
         /// Создает подлинник и подключает его к номенклатуре, к которой подключен исходник
         /// </summary>
@@ -166,15 +153,15 @@ namespace ExportFiles
             foreach (var pair in fileObjects)
             {
                 var fileSource = pair.Value;
-                export.SetFileObject(fileSource);
+                //export.SetFileObject(fileSource);
                 DataVariables dataVariables = new DataVariables();// создан объект с переменными
                 dataVariables.SetFileObject(fileSource);//
                 dataVariables.SetNomenclature(pair.Key);//
                 controllerVariables.SetVarriables(fileSource);
-                var newFile = export.ExportToFormat(isNewFiles, dataVariables);// использован второй параметр
+                //var newFile = export.ExportToFormat(isNewFiles, dataVariables);// использован второй параметр
                 if (isNewFiles)
                 {
-                    addAllLinkedNomenclature(newFile, fileSource);
+                    //addAllLinkedNomenclature(newFile, fileSource);
                 }
             }
         }
@@ -186,15 +173,15 @@ namespace ExportFiles
         /// <param name="isNewFile"></param>
         public void Export(DataVariables dataVariables, bool isNewFile)
         {
-            foreach(var pair in fileObjects)
+            foreach (var pair in fileObjects)
             {
                 var fileSource = pair.Value;
-                export.SetFileObject(fileSource);
+                //export.SetFileObject(fileSource);
                 controllerVariables.SetVarriables(fileSource);
-                var newFile = export.ExportToFormat(isNewFile, dataVariables);// использован второй параметр
+                //var newFile = export.ExportToFormat(isNewFile, dataVariables);// использован второй параметр
                 if (isNewFile)
                 {
-                    addAllLinkedNomenclature(newFile, fileSource);
+                    //addAllLinkedNomenclature(newFile, fileSource);
                 }
             }
         }
@@ -229,36 +216,9 @@ namespace ExportFiles
             }
         }
 
-        /// <summary>
-        /// Возвращает список подлинников
-        /// </summary>
-        public List<FileObject> GetTifFiles()
-        {
-            List<FileObject> listFiles = new List<FileObject>();
-            foreach(var nomenclature in fileObjects.Keys)
-            {
-                var document = nomenclature.LinkedObject as EngineeringDocumentObject;
-                listFiles.Add(document.GetFiles().Where(file => file.Class.Extension.ToLower().Equals("tif")).FirstOrDefault());
-            }
-            return listFiles;
-        }
-        ///// <summary>
-        ///// Можно редактировать или нет
-        ///// </summary>
-        ///// <param name="obj"></param>
-        ///// <returns></returns>
-        //public static bool isEditable(ReferenceObject obj)
-        //{
-        //    return obj.SystemFields.Stage.Guid.Equals(StageGuids.Корректировка) ||
-        //        obj.SystemFields.Stage.Guid.Equals(StageGuids.Разработка) ||
-        //        obj.SystemFields.Stage.Guid.Equals(StageGuids.Исправление);
-
-        //}
-        
         public List<NomenclatureObject> GetNomenclatures()
         {
             return this.fileObjects.Keys.ToList();
         }
-
     }
 }

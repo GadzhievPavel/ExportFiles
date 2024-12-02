@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExportFiles.Handler.Exporter;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace ExportFiles.Handler.CadVariables
 {
     internal interface IControllerVariables
     {
-        void SetVariables(DataVariables dataVariables, VariableCollection variables);
+        //void SetVariables(DataVariables dataVariables, VariableCollection variables);
+        DataVariableCad GetDataVariableCad();
     }
 }

@@ -17,17 +17,20 @@ namespace ExportFiles.Handler.CadVariables
     public class DataVariables
     {
         private NomenclatureObject nomenclature;
-        private FileObject fileObject;
-        private ReferenceObject notice;
+        public FileObject fileObject { get; set; }
+        public ReferenceObject notice { get; set; }
         public DataVariables() { }
 
         public DataVariables(NomenclatureObject nomenclature, FileObject fileObject, ReferenceObject notice)
         {
             SetNomenclature(nomenclature);
-            SetFileObject(fileObject);
-            SetNotice(notice);
+            this.fileObject = fileObject;
+            this.notice = notice;
         }
 
+        public DataVariables(NomenclatureObject nomenclature) : this(nomenclature, null, null) { }
+
+        public DataVariables(NomenclatureObject nomenclature, FileObject fileObject): this(nomenclature, fileObject, null) { }
         /// <summary>
         /// Задать номенклатуру
         /// </summary>
@@ -45,28 +48,6 @@ namespace ExportFiles.Handler.CadVariables
 
         public NomenclatureObject GetNomenclature() { return nomenclature; }
 
-        /// <summary>
-        /// Задать файл
-        /// </summary>
-        /// <param name="fileObject"></param>
-        public void SetFileObject(FileObject fileObject)
-        {
-            this.fileObject = fileObject;
-        }
-        public FileObject GetFileObject() { return fileObject; }
-        /// <summary>
-        /// Задать ИИ
-        /// </summary>
-        /// <param name="notice"></param>
-        /// <exception cref="DataVariablesException">Если объект не является ИИ</exception>
-        public void SetNotice(ReferenceObject _notice)
-        {
-            //if (!_notice.Reference.ParameterGroup.ReferenceInfo.Guid.Equals(Guids.NoticeModificationReference.ИзвещенияОбИзменениях))
-            //{
-            //    throw new DataVariablesException($"объект {_notice} не относится к справчнику \"Измевещния обИзменениях\"");
-            //}
-            this.notice = _notice;
-        }
-        public ReferenceObject GetNotice() { return notice; }
+
     }
 }

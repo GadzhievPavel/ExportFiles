@@ -1,5 +1,6 @@
 ﻿using ExportFiles.Exception;
 using ExportFiles.Exception.FileException;
+using ExportFiles.Handler.CadVariables;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ using TFlex.DOCs.References.Configurations;
 
 namespace ExportFiles.Handler.Exporter
 {
+
     public class FileExporter
     {
         /// <summary>
@@ -44,6 +46,16 @@ namespace ExportFiles.Handler.Exporter
 
         private FileHandler fileHandler;
 
+        private DataVariables data;
+        public DataVariables Data
+        {
+            set { this.data = value; }
+        }
+
+        public delegate DataVariableCad SetVariable();
+
+        public SetVariable setVariable;
+
         public FileExporter(ServerConnection connection, string nameConfig, bool isNew)
         {
             this.connection = connection;
@@ -56,6 +68,7 @@ namespace ExportFiles.Handler.Exporter
             this.provider = CadDocumentProvider.Connect(connection, ".grb");
             this.fileHandler = new FileHandler(connection);
         }
+
 
         /// <summary>
         /// Чтение конфига для эксплорта
@@ -126,6 +139,12 @@ namespace ExportFiles.Handler.Exporter
                         "Ошибка получения страниц.{0}" +
                         "При операции получения страниц произошла следующая ошибка:{0}" +
                         "Файл '{1}' не может быть открыт", Environment.NewLine, file.Name));
+                }
+
+                if (setVariable != null && data != null)
+                {
+                    var dataCad = setVariable();
+                    new CadVariablesWriter(document, dataCad, exportParameters.saveChangesInLocalFile).WriteValues();
                 }
 
                 var exportContext = GetExportContext(document);

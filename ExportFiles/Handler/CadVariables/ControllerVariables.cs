@@ -15,6 +15,7 @@ using TFlex.DOCs.Model.References.Nomenclature;
 using TFlex.DOCs.Model.Signatures;
 using ExportFiles.Handler.Model;
 using TFlex.DOCs.Model.References.Users;
+using ExportFiles.Handler.Exporter;
 
 namespace ExportFiles.Handler.CadVariables
 {
@@ -36,12 +37,17 @@ namespace ExportFiles.Handler.CadVariables
         /// </summary>
         private string extension = ".grb";
 
+        private DataVariables data;
         public ControllerVariables(ServerConnection connection)
         {
             this.connection = connection;
             provider = CadDocumentProvider.Connect(connection, extension);
         }
 
+        public ControllerVariables(DataVariables data)
+        {
+            this.data = data;
+        }
         /// <summary>
         /// Установка в переменные подписи с файла
         /// </summary>
@@ -148,7 +154,7 @@ namespace ExportFiles.Handler.CadVariables
 
                 var isNew = change[Guids.ChangeReference.Parameter.ПараметрНовый].GetBoolean();
                 TrySetVarribleValue(variables, "$flag_new", isNew);
-                
+
             }
 
             //var signDocumentoved = file.Signatures.Where(sign => sign.SignatureObjectType.Id == 25).FirstOrDefault();
@@ -251,6 +257,12 @@ namespace ExportFiles.Handler.CadVariables
             }
             SetBaseInfoVariables(variables, dataVariables.GetFileObject(), dataVariables.GetNomenclature());
             variables.Save();
+        }
+
+        public DataVariableCad GetDataVariableCad()
+        {
+            var dataCad = new DataVariableCad();
+
         }
     }
 }

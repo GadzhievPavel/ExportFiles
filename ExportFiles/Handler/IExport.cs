@@ -20,12 +20,6 @@ namespace ExportFiles.Handler
         void Export(DataVariables dataVariables, bool isNewFile);
 
         /// <summary>
-        /// Возвращает подлинники с форматом tif
-        /// </summary>
-        /// <returns></returns>
-        List<FileObject> GetTifFiles();
-
-        /// <summary>
         /// Возвращает номенклатуру
         /// </summary>
         /// <returns></returns>
