@@ -18,6 +18,7 @@ namespace ExportFiles.Handler.Exporter
             this.extension = config["Extension"];
             this.tempExportingFilePath = config["TempExportingFilePath"];
             this.pages = new List<string>();
+            this.isNewFile = config["isNewFile"];
             pages.Add(config["namePage"]);
         }
         /// <summary>
@@ -44,6 +45,10 @@ namespace ExportFiles.Handler.Exporter
         /// Временная папка для экспортированного файла
         /// </summary>
         public string tempExportingFilePath;
+        /// <summary>
+        /// Создавать новый файл подлинник
+        /// </summary>
+        public bool isNewFile;
 
         public override string ToString()
         {

@@ -16,6 +16,7 @@ using TFlex.DOCs.Model.Signatures;
 using ExportFiles.Handler.Model;
 using TFlex.DOCs.Model.References.Users;
 using ExportFiles.Handler.Exporter;
+using NomenclatureExtensionLibray;
 
 namespace ExportFiles.Handler.CadVariables
 {
@@ -24,60 +25,84 @@ namespace ExportFiles.Handler.CadVariables
     /// </summary>
     public class ControllerVariables : IControllerVariables
     {
-        /// <summary>
-        /// Провайдер для доступа к содержимому GRB файла
-        /// </summary>
-        private CadDocumentProvider provider;
-        /// <summary>
-        /// Подключение к серверу
-        /// </summary>
-        private ServerConnection connection;
-        /// <summary>
-        /// Формат GRB файла
-        /// </summary>
-        private string extension = ".grb";
 
         private DataVariables data;
-        public ControllerVariables(ServerConnection connection)
-        {
-            this.connection = connection;
-            provider = CadDocumentProvider.Connect(connection, extension);
-        }
 
         public ControllerVariables(DataVariables data)
         {
             this.data = data;
         }
 
-        /// <summary>
-        /// Заполнение основной надписи чертежа (Наименование/Обозначение/Основной материал(если есть))
-        /// </summary>
-        /// <param name="variables"></param>
-        /// <param name="file">Оригинал grb</param>
-        /// <param name="nom">номенклатура</param>
-        private void SetBaseInfoVariables(VariableCollection variables, FileObject file, NomenclatureObject nom)
+        private DataVariableCad MakeSignatures(ref DataVariableCad dataCad, SignatureCollection signatures)
         {
-            if (nom.Class.IsAssembly)
-            {
-                TrySetVarribleValue(variables, "$Vid_Chert", "Сборочный чертеж");
-            }
-            TrySetVarribleValue(variables, "$Наименование", nom.Name);
+            SignaturaVariable(ref dataCad, signatures, 3, "$Разработал", "$Дата_разраб");
+            SignaturaVariable(ref dataCad, signatures, 2, "$Проверил", "$Дата_пров");
+            SignaturaVariable(ref dataCad, signatures, 1, "$Н_контр", "$Дата_н_контр");
+            SignaturaVariable(ref dataCad, signatures, 6, "$Утвердил", "$Дата_утв");
+            SignaturaVariable(ref dataCad, signatures, 5, "$Т_контр", "$Дата_т_контр");
+            return dataCad;
+        }
 
-            var nomWrap = new At3bootNomenclatureObject(nom);
-            if (nomWrap.haveGroupDrawing())
+        private DataVariableCad SignaturaVariable(ref DataVariableCad dataCad, SignatureCollection signatures, int id, string varShortName, string varDate)
+        {
+            var signature = signatures.FirstOrDefault(s => s.SignatureObjectType.Id == id);
+            if (signature == null)
             {
-                var groupDrawing = nomWrap.getGroupDrawing();
-                TrySetVarribleValue(variables, "$Обозначение", groupDrawing.getDenotationBaseVariant());
+                return dataCad;
+            }
+
+            var shortName = (signature.UserObject as User).ShortName;
+            var date = signature.SignatureDate.Value.ToString("d.MM.yy");
+
+            dataCad.Add(new CadVariable { Key = varShortName, Value = shortName });
+            dataCad.Add(new CadVariable { Key = varDate, Value = date });
+            return dataCad;
+        }
+
+        private DataVariableCad NotificationVariable(ref DataVariableCad dataCad)
+        {
+            dataCad.Add("$ii", data.notice[Guids.NoticeModificationReference.Parameter.ОбозначениеИзвещенияОбИзменения].GetString());
+            var changes = data.notice.GetObjects(Guids.NoticeModificationReference.Links.ИзвещенияИзменения);
+            foreach (var change in changes)
+            {
+                var nomenclature = change.GetObject(Guids.ChangeReference.Links.ОбъектЭСИ) as NomenclatureObject;
+                if (nomenclature is null)
+                {
+                    break;
+                }
+                var doc = nomenclature.LinkedObject as EngineeringDocumentObject;
+                if (doc is null)
+                {
+                    break;
+                }
+                if (doc.GetFiles().Contains(data.fileObject))
+                {
+                    dataCad.Add("$izm", change[Guids.ChangeReference.Parameter.НомерИзменения].GetString());
+                }
+                dataCad.Add("$flag_new", change[Guids.ChangeReference.Parameter.ПараметрНовый].GetBoolean());
+            }
+            return dataCad;
+        }
+
+        private DataVariableCad SetBaseInfoVariables(ref DataVariableCad dataCad)
+        {
+            if (data.GetNomenclature().Class.IsAssembly)
+            {
+                dataCad.Add("$Vid_Chert", "Сборочный чертеж");
+            }
+            dataCad.Add("$Наименование", data.GetNomenclature().Name);
+
+            if (data.GetNomenclature().HaveGroupDrawing())
+            {
+                var groupDrawing = new GroupDrawing(data.GetNomenclature().GetGroupDrawing());
+                dataCad.Add("$Обозначение", groupDrawing.getDenotationBaseVariant());
             }
             else
             {
-                TrySetVarribleValue(variables, "$Обозначение", nom.Denotation);
+                dataCad.Add("$Обозначение", data.GetNomenclature().Denotation);
             }
 
-
-            var nomenclature = (NomenclatureObject)nom;
-            var document = nomenclature.LinkedObject as EngineeringDocumentObject;
-
+            var document = data.GetNomenclature().LinkedObject as EngineeringDocumentObject;
             ReferenceObject material = null;
             try
             {
@@ -90,142 +115,27 @@ namespace ExportFiles.Handler.CadVariables
 
             if (material is null)
             {
-                return;
-            }
-            var materialName = material[Guids.MaterialReference.Parameter.СводноеНаименование].GetString();
-
-            TrySetVarribleValue(variables, "$Материал2", materialName);
-        }
-
-        /// <summary>
-        /// Установка в основную надпись параметров на основе ИИ
-        /// </summary>
-        /// <param name="variables"></param>
-        /// <param name="file">оригинал GRB</param>
-        /// <param name="notification">ИИ</param>
-        private void SetNotificationVariables(VariableCollection variables, FileObject file, ReferenceObject notification)
-        {
-            if (notification.Equals(null))
-            {
-                return;
-            }
-            TrySetVarribleValue(variables, "$ii", notification[Guids.NoticeModificationReference.Parameter.ОбозначениеИзвещенияОбИзменения].GetString());
-
-            var changes = notification.GetObjects(Guids.NoticeModificationReference.Links.ИзвещенияИзменения);
-
-            foreach (var change in changes)
-            {
-                var nomenclature = change.GetObject(Guids.ChangeReference.Links.ОбъектЭСИ) as NomenclatureObject;
-                if (nomenclature is null)
-                {
-                    return;
-                }
-                var doc = nomenclature.LinkedObject as EngineeringDocumentObject;
-                if (doc is null)
-                {
-                    return;
-                }
-                if (doc.GetFiles().Contains(file))
-                {
-                    TrySetVarribleValue(variables, "$izm", change[Guids.ChangeReference.Parameter.НомерИзменения].GetString());
-                }
-
-                var isNew = change[Guids.ChangeReference.Parameter.ПараметрНовый].GetBoolean();
-                TrySetVarribleValue(variables, "$flag_new", isNew);
-
+                return dataCad;
             }
 
-            //var signDocumentoved = file.Signatures.Where(sign => sign.SignatureObjectType.Id == 25).FirstOrDefault();
-            //if (signDocumentoved is null)
-            //{
-            //    return;
-            //}
-            //TrySetVarribleValue(variables, "$d_doc", signDocumentoved.SignatureDate.Value.ToString("d.MM.yy"));
+            dataCad.Add("$Материал2", material[Guids.MaterialReference.Parameter.СводноеНаименование].GetString());
+
+            return dataCad;
         }
 
-        /// <summary>
-        /// Установка подписей
-        /// </summary>
-        /// <param name="signatures"></param>
-        /// <param name="variables"></param>
-        private void SetSignaturesVariables(SignatureCollection signatures, VariableCollection variables)
-        {
-            SetSignatureVarrible(signatures, variables, "$Разработал", "$Дата_разраб", 3);//Разработал
-            SetSignatureVarrible(signatures, variables, "$Проверил", "$Дата_пров", 2);//Проверил
-            SetSignatureVarrible(signatures, variables, "$Н_контр", "$Дата_н_контр", 1);//Нормоконтроль
-            SetSignatureVarrible(signatures, variables, "$Утвердил", "$Дата_утв", 6);//Утвердил
-            SetSignatureVarrible(signatures, variables, "$Т_контр", "$Дата_т_контр", 5);//Т.контр
-        }
-
-        /// <summary>
-        /// Установка одной подписи
-        /// </summary>
-        /// <param name="signatures">Коллекция подписей Doc's</param>
-        /// <param name="varribles"></param>
-        /// <param name="userVarribleName">имя пользователя</param>
-        /// <param name="dataVarrivbleName">дата подписи</param>
-        /// <param name="signatureId">id типа подписи</param>
-        private void SetSignatureVarrible(SignatureCollection signatures, VariableCollection varribles, string userVarribleName, string dataVarrivbleName, int signatureId)
-        {
-            //Находим подпись с указанным идентификатором
-            var userSignature = signatures.FirstOrDefault(s => s.SignatureObjectType.Id == signatureId);
-            if (userSignature is null)
-                return;
-
-            var user = userSignature.UserObject as User;
-            TrySetVarribleValue(varribles, userVarribleName, user.ShortName);
-            TrySetVarribleValue(varribles, dataVarrivbleName, userSignature.SignatureDate.Value.ToString("d.MM.yy"));
-        }
-
-        /// <summary>
-        /// Метод для установки значения в указанную переменную
-        /// </summary>
-        /// <param name="varribles"></param>
-        /// <param name="varribleName">наименование переменной в GRB</param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        private bool TrySetVarribleValue(VariableCollection varribles, string varribleName, object value)
-        {
-            //Ищем переменную по наименованию
-            var foundedVarrible = varribles.FirstOrDefault(v => v.Name == varribleName);
-            if (foundedVarrible is null)
-                return false;
-
-            try
-            {
-                //Записываем в переменную значение выражения
-                foundedVarrible.Expression = "\"" + value.ToString() + "\"";
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-
-
-        public void SetVariables(DataVariables dataVariables, VariableCollection variables)
-        {
-            SetSignaturesVariables(dataVariables.GetFileObject().Signatures, variables);
-            if (dataVariables.GetNotice() != null)
-            {
-                SetNotificationVariables(variables, dataVariables.GetFileObject(), dataVariables.GetNotice());
-            }
-            SetBaseInfoVariables(variables, dataVariables.GetFileObject(), dataVariables.GetNomenclature());
-            variables.Save();
-        }
-
-        private List<CadVariable> makeSignature(SignatureCollection signatures)
-        {
-
-        }
-
-        private DataVariableCad GetDataVariableCad()
+        public DataVariableCad GetDataVariableCad()
         {
             var dataCad = new DataVariableCad();
             var signatures = data.fileObject.Signatures;
+            MakeSignatures(ref dataCad, signatures);
 
+            if (data.notice != null)
+            {
+                NotificationVariable(ref dataCad);
+            }
+            SetBaseInfoVariables(ref dataCad);
+
+            return dataCad;
         }
     }
 }

@@ -22,10 +22,6 @@ namespace ExportFiles.Handler.Exporter
     public class FileExporter
     {
         /// <summary>
-        ///  Генерировать новый подлинник или нет
-        /// </summary>
-        private bool isNew;
-        /// <summary>
         /// Файл исходник формата grb
         /// </summary>
         private FileObject file;
@@ -56,11 +52,10 @@ namespace ExportFiles.Handler.Exporter
 
         public SetVariable setVariable;
 
-        public FileExporter(ServerConnection connection, string nameConfig, bool isNew)
+        public FileExporter(ServerConnection connection, string nameConfig)
         {
             this.connection = connection;
             SetSettings(nameConfig);
-            this.isNew = isNew;
 
             if (!Directory.Exists(_tempFolder))
                 Directory.CreateDirectory(_tempFolder);
@@ -150,7 +145,7 @@ namespace ExportFiles.Handler.Exporter
                 var exportContext = GetExportContext(document);
                 var pathNewFile = document.Export(exportContext);
 
-                uploadedFile = fileHandler.UploadExportFile(exportParameters.tempExportingFilePath, file.Name, file.Parent.Path, isNew);
+                uploadedFile = fileHandler.UploadExportFile(exportParameters.tempExportingFilePath, file.Name, file.Parent.Path, exportParameters.isNewFile);
                 document.Close(exportParameters.saveChangesInLocalFile);
 
                 if (pathNewFile == null)

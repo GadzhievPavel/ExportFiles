@@ -38,7 +38,7 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NomenclatureExtensionLibray">
-      <HintPath>..\..\GadzhievPavel\NomenclatureExtensionLibray\NomenclatureExtensionLibray\bin\Debug\NomenclatureExtensionLibray.dll</HintPath>
+      <HintPath>..\..\NomenclatureExtensionLibray\NomenclatureExtensionLibray\bin\Debug\NomenclatureExtensionLibray.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -123,7 +123,6 @@
     <Compile Include="Handler\Model\API1\StringReferenceObject.designer.cs">
       <DependentUpon>StringReferenceObject.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Model\At3bootNomenclatureObject.cs" />
     <Compile Include="Handler\Model\GroupDrawing.cs" />
     <Compile Include="Handler\NotificationModificationsExportNomenclature.cs" />
     <Compile Include="Handler\VariableHandler\FileVariables.cs" />

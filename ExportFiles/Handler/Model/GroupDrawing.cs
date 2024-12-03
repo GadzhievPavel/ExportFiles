@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NomenclatureExtensionLibray;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,7 @@ namespace ExportFiles.Handler.Model
 
         public GroupDrawing(NomenclatureObject nom)
         {
-            if(!(nom.Class.IsDrawing || nom.Class.Guid.Equals(Guids.NomenclatureReference.TypeAssemblyDrawing)))
+            if(!nom.HaveGroupDrawing())
             {
                 throw new System.Exception($"номенклатура {nom} не явдяется групповым чертежом");
             }

@@ -8,7 +8,7 @@ using TFlex.DOCs.Model.References.Files;
 
 namespace ExportFiles.Handler.Exporter
 {
-    public class DataVariableCad:IEnumerable<string>
+    public class DataVariableCad : IEnumerable<string>
     {
         private Dictionary<string, object> data;
 
@@ -27,6 +27,14 @@ namespace ExportFiles.Handler.Exporter
             data[cadVariable.Key] = cadVariable.Value;
         }
 
+        public void AddRange(DataVariableCad dataCad)
+        {
+            foreach (var kvp in dataCad)
+            {
+                var v = dataCad[kvp];
+                Add(kvp, v);
+            }
+        }
         public object this[string key]
         {
             get { return data[key]; }

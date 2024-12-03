@@ -23,7 +23,7 @@ namespace ExportFiles
         /// <summary>
         /// Экспортер подлиников
         /// </summary>
-        private FileExporter fileExporter;
+        protected FileExporter fileExporter;
         /// <summary>
         /// коллекция разрешенных типов номенклатур для генерации подлинников
         /// </summary>
@@ -53,17 +53,15 @@ namespace ExportFiles
             }
 
             this.stageController = new StageController(connection);
-            this.controllerVariables = new ControllerVariables(connection);
         }
 
-        public NomenclatureExport(ServerConnection connection, string nameConfig, bool isNewFile)
+        public NomenclatureExport(ServerConnection connection, string nameConfig)
         {
-            this.fileExporter = new FileExporter(connection, nameConfig, isNewFile);
+            this.fileExporter = new FileExporter(connection, nameConfig);
             this.enabledClassesObjectsNomenclature = new HashSet<NomenclatureType> { };
             this.nomenclatureReference = new NomenclatureReference(connection);
             this.fileObjects = new Dictionary<NomenclatureObject, FileObject> { };
             this.stageController = new StageController(connection);
-            this.controllerVariables = new ControllerVariables(connection);
         }
 
 
@@ -133,7 +131,6 @@ namespace ExportFiles
 
         public void Export()
         {
-
             foreach (var pair in fileObjects)
             {
                 var fileSource = pair.Value;
@@ -142,48 +139,6 @@ namespace ExportFiles
                 ControllerVariables controllerVariables = new ControllerVariables(data);
                 fileExporter.setVariable = controllerVariables.GetDataVariableCad;
                 fileExporter.Export();
-            }
-        }
-
-        /// <summary>
-        /// Создает подлинник и подключает его к номенклатуре, к которой подключен исходник
-        /// </summary>
-        /// <param name="isNewFiles">делать новый файл подлинника или нет</param>
-        public void Export(bool isNewFiles)
-        {
-            foreach (var pair in fileObjects)
-            {
-                var fileSource = pair.Value;
-                //export.SetFileObject(fileSource);
-                DataVariables dataVariables = new DataVariables();// создан объект с переменными
-                dataVariables.fileObject = fileSource;//
-                dataVariables.SetNomenclature(pair.Key);//
-                controllerVariables.SetVarriables(fileSource);
-                //var newFile = export.ExportToFormat(isNewFiles, dataVariables);// использован второй параметр
-                if (isNewFiles)
-                {
-                    //addAllLinkedNomenclature(newFile, fileSource);
-                }
-            }
-        }
-
-        /// <summary>
-        /// Создает подлинник и подключает его к номенклатуре, к которой подключен исходник
-        /// </summary>
-        /// <param name="dataVariables"></param>
-        /// <param name="isNewFile"></param>
-        public void Export(DataVariables dataVariables, bool isNewFile)
-        {
-            foreach (var pair in fileObjects)
-            {
-                var fileSource = pair.Value;
-                //export.SetFileObject(fileSource);
-                controllerVariables.SetVarriables(fileSource);
-                //var newFile = export.ExportToFormat(isNewFile, dataVariables);// использован второй параметр
-                if (isNewFile)
-                {
-                    //addAllLinkedNomenclature(newFile, fileSource);
-                }
             }
         }
 

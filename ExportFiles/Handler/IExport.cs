@@ -15,14 +15,7 @@ namespace ExportFiles.Handler
         /// Формирует подлинники с форматом tif
         /// </summary>
         /// <param name="isNewFile"></param>
-        void Export(bool isNewFile);
+        void Export();
 
-        void Export(DataVariables dataVariables, bool isNewFile);
-
-        /// <summary>
-        /// Возвращает номенклатуру
-        /// </summary>
-        /// <returns></returns>
-        List<NomenclatureObject> GetNomenclatures();
     }
 }

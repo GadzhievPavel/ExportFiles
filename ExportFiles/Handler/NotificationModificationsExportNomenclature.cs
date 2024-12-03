@@ -24,7 +24,7 @@ namespace ExportFiles.Handler
         /// </summary>
         private ReferenceObject notice;
 
-        public ModificationNoticeExportNomenclature(ServerConnection connection) : base(connection)
+        public ModificationNoticeExportNomenclature(ServerConnection connection, String nameConfig) : base(connection, nameConfig)
         {
         }
 
@@ -54,27 +54,21 @@ namespace ExportFiles.Handler
         /// Создает подлинники из оригиналлов grb прикрепленных к изменяемой номенклатуре в ИИ
         /// </summary>
         /// <param name="isNewFiles"></param>
-        public new void Export(bool isNewFiles)
+        public new void Export()
         {
             foreach (var pair in fileObjects)
             {
                 var fileSource = pair.Value;
                 var nomenclature = pair.Key;
-                export.SetFileObject(fileSource);
-                export.SetNomenclature(nomenclature);
-                DataVariables dataVariables = new DataVariables();
-                dataVariables.SetNotice(notice);
-                dataVariables.SetFileObject(fileSource);
-                dataVariables.SetNomenclature(pair.Key);
-                //controllerVariables.SetVarriables(dataVariables);
-                var newFile = export.ExportToFormat(isNewFiles, dataVariables);
-                if (isNewFiles)
-                {
-                    addAllLinkedNomenclature(newFile, fileSource);
-                }
-
+                this.fileExporter.SetFile(fileSource);
+                DataVariables dataVariables = new DataVariables(nomenclature, fileSource, notice);
+                ControllerVariables controllerVariables = new ControllerVariables(dataVariables);
+                fileExporter.setVariable = controllerVariables.GetDataVariableCad;
+                fileExporter.Export();
             }
         }
+
+
 
         /// <summary>
         /// Проверка на возможность редактирования
@@ -83,7 +77,7 @@ namespace ExportFiles.Handler
         /// <returns></returns>
         private bool isEnabledStage(NomenclatureObject nomenclature)
         {
-   
+
             return !nomenclature.SystemFields.Stage.Guid.Equals(StageGuids.Хранение);
         }
     }
