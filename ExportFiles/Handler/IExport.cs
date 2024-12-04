@@ -15,7 +15,7 @@ namespace ExportFiles.Handler
         /// Формирует подлинники с форматом tif
         /// </summary>
         /// <param name="isNewFile"></param>
-        void Export();
+        List<FileObject> Export(string nameConfig);
 
     }
 }

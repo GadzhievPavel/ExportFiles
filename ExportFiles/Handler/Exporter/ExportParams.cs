@@ -19,6 +19,11 @@ namespace ExportFiles.Handler.Exporter
             this.tempExportingFilePath = config["TempExportingFilePath"];
             this.pages = new List<string>();
             this.isNewFile = config["isNewFile"];
+            try
+            {
+                this.pathUploadFolder = config["UploadFolder"];
+            }
+            catch { }
             pages.Add(config["namePage"]);
         }
         /// <summary>
@@ -49,6 +54,10 @@ namespace ExportFiles.Handler.Exporter
         /// Создавать новый файл подлинник
         /// </summary>
         public bool isNewFile;
+        /// <summary>
+        /// Путь папки в которую требуется загружать экспортированный файл 
+        /// </summary>
+        public string pathUploadFolder;
 
         public override string ToString()
         {

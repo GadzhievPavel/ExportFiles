@@ -44,7 +44,7 @@ namespace ExportFiles
 
         private ConfigurationsReference configReference;
 
-        private ConfigReferenceObject config;
+        private Config config;
 
         protected ControllerVariables controllerVariables;
 
@@ -66,14 +66,14 @@ namespace ExportFiles
         //    ReadConfigTypesNomenclature(listTypesConfig);
         //}
 
-        public NomenclatureExport(ServerConnection connection, string nameConfig)
+        public NomenclatureExport(ServerConnection connection)
         {
-            this.fileExporter = new FileExporter(connection, nameConfig);
+            this.fileExporter = new FileExporter(connection);
             this.enabledClassesObjectsNomenclature = new HashSet<NomenclatureType> { };
             this.nomenclatureReference = new NomenclatureReference(connection);
             this.fileObjects = new Dictionary<NomenclatureObject, FileObject> { };
             this.stageController = new StageController(connection);
-
+            this.configReference = new ConfigurationsReference(connection);
             ReadConfigTypesNomenclature(listTypesConfig);
             
         }
@@ -81,20 +81,20 @@ namespace ExportFiles
 
         private void ReadConfigTypesNomenclature(string nameConfig)
         {
-            this.config = configReference.FindConfig(nameConfig);
+            config = configReference.FindConfig(nameConfig).getParameters();
             var listStrings = new List<string>();
-            listStrings.Add(config["Деталь"].GetValue() as String);
-            listStrings.Add(config["Сборочная единица"].GetValue() as String);
-            listStrings.Add(config["Изделие"].GetValue() as String);
-            listStrings.Add(config["Спецификация"].GetValue() as String);
-            listStrings.Add(config["Комплект"].GetValue() as String);
-            listStrings.Add(config["Комплекс"].GetValue() as String);
-            listStrings.Add(config["Заготовка"].GetValue() as String);
-            listStrings.Add(config["перечень элементов"].GetValue() as String);
-            listStrings.Add(config["Ведомость"].GetValue() as String);
-            listStrings.Add(config["Ведомость покупных изделий"].GetValue() as String);
-            listStrings.Add(config["Ведомость спецификаций"].GetValue() as String);
-            listStrings.Add(config["Ведомость замен"].GetValue() as String);
+            listStrings.Add(config["Деталь"]);
+            listStrings.Add(config["Сборочная единица"]);
+            listStrings.Add(config["Изделие"]);
+            listStrings.Add(config["Спецификация"]);
+            listStrings.Add(config["Комплект"]);
+            listStrings.Add(config["Комплекс"]);
+            listStrings.Add(config["Заготовка"]);
+            listStrings.Add(config["перечень элементов"]);
+            listStrings.Add(config["Ведомость"]);
+            listStrings.Add(config["Ведомость покупных изделий"]);
+            listStrings.Add(config["Ведомость спецификаций"]);
+            listStrings.Add(config["Ведомость замен"]);
 
             foreach(var l in listStrings)
             {
@@ -165,16 +165,26 @@ namespace ExportFiles
             return enabledClassesObjectsNomenclature.Contains(nomenclature.Class);
         }
 
-        public void Export()
+        public List<FileObject> Export(string nameConfig)
         {
+            var exportedFiles = new List<FileObject>();
             foreach (var pair in fileObjects)
             {
                 var fileSource = pair.Value;
                 fileExporter.SetFile(fileSource);
+                var exportParams = fileExporter.SetSettings(nameConfig);
                 var data = new DataVariables(pair.Key, fileSource);
                 ControllerVariables controllerVariables = new ControllerVariables(data);
                 fileExporter.setVariable = controllerVariables.GetDataVariableCad;
-                fileExporter.Export();
+                var exportedFile = fileExporter.Export();
+
+                exportedFiles.Add(exportedFile);
+
+                if (exportParams.isNewFile)
+                {
+                    addAllLinkedNomenclature(exportedFile, fileSource);
+                }
+                exportedFile.EndUpdate("save");
             }
         }
 
@@ -194,7 +204,7 @@ namespace ExportFiles
                 bool flag = false;
                 if (!StageController.isEditable(document))
                 {
-                    stageController.ChangeStage(StageGuids.Корректировка, new List<ReferenceObject>() { document });
+                    stageController.ChangeStage(StageGuids.Исправление, new List<ReferenceObject>() { document });
                     flag = true;
                 }
                 document.StartUpdate();

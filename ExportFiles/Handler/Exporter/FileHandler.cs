@@ -116,10 +116,10 @@ namespace ExportFiles.Handler.Exporter
         /// <summary>
         /// Загрузка в T-FLEX файла с указанным именем
         /// </summary>
-        /// <param name="tempFilePath"></param>
-        /// <param name="nameNewFile"></param>
-        /// <param name="parentFolderPath"></param>
-        /// <param name="isNewFile"></param>
+        /// <param name="tempFilePath">локальный путь до временного файла</param>
+        /// <param name="nameNewFile">имя загружаемого файла</param>
+        /// <param name="parentFolderPath">загружаемая папка в T-FLEX DOCs</param>
+        /// <param name="isNewFile">загружается новый файл</param>
         /// <returns></returns>
         public FileObject UploadExportFile(string tempFilePath, string nameNewFile, string parentFolderPath, bool isNewFile)
         {

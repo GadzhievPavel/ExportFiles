@@ -24,7 +24,7 @@ namespace ExportFiles.Handler
         /// </summary>
         private ReferenceObject notice;
 
-        public ModificationNoticeExportNomenclature(ServerConnection connection, String nameConfig) : base(connection, nameConfig)
+        public ModificationNoticeExportNomenclature(ServerConnection connection, String nameConfig) : base(connection)
         {
         }
 
@@ -54,13 +54,14 @@ namespace ExportFiles.Handler
         /// Создает подлинники из оригиналлов grb прикрепленных к изменяемой номенклатуре в ИИ
         /// </summary>
         /// <param name="isNewFiles"></param>
-        public new void Export()
+        public new List<FileObject> Export(string nameConfig)
         {
             foreach (var pair in fileObjects)
             {
                 var fileSource = pair.Value;
                 var nomenclature = pair.Key;
                 this.fileExporter.SetFile(fileSource);
+                this.fileExporter.SetSettings(nameConfig);
                 DataVariables dataVariables = new DataVariables(nomenclature, fileSource, notice);
                 ControllerVariables controllerVariables = new ControllerVariables(dataVariables);
                 fileExporter.setVariable = controllerVariables.GetDataVariableCad;

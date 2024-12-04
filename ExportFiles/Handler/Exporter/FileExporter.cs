@@ -43,19 +43,15 @@ namespace ExportFiles.Handler.Exporter
         private FileHandler fileHandler;
 
         private DataVariables data;
-        public DataVariables Data
-        {
-            set { this.data = value; }
-        }
 
         public delegate DataVariableCad SetVariable();
 
         public SetVariable setVariable;
 
-        public FileExporter(ServerConnection connection, string nameConfig)
+        private string nameUploadFolder;
+        public FileExporter(ServerConnection connection)
         {
             this.connection = connection;
-            SetSettings(nameConfig);
 
             if (!Directory.Exists(_tempFolder))
                 Directory.CreateDirectory(_tempFolder);
@@ -70,12 +66,21 @@ namespace ExportFiles.Handler.Exporter
         /// </summary>
         /// <param name="config"></param>
         /// <exception cref="ExportFilesException"></exception>
-        private void SetSettings(string nameConfig)
+        public ExportParams SetSettings(string nameConfig)
         {
             var configReference = new ConfigurationsReference(this.connection);
             var config = configReference.FindConfig(nameConfig);
 
             this.exportParameters = new ExportParams(config.getParameters());
+
+            if (exportParameters.pathUploadFolder is null)
+            {
+                this.nameUploadFolder = this.file.Parent.Path;
+            }
+            else
+            {
+                this.nameUploadFolder = exportParameters.pathUploadFolder;
+            }
             try
             {
                 string tempExportingFilePath = Path.Combine(_tempFolder, String.Format("{0}.{1}", Guid.NewGuid(), exportParameters.extension));
@@ -85,7 +90,7 @@ namespace ExportFiles.Handler.Exporter
             {
                 throw new ExportFilesException(ex);
             }
-
+            return exportParameters;
         }
 
         /// <summary>
@@ -145,7 +150,8 @@ namespace ExportFiles.Handler.Exporter
                 var exportContext = GetExportContext(document);
                 var pathNewFile = document.Export(exportContext);
 
-                uploadedFile = fileHandler.UploadExportFile(exportParameters.tempExportingFilePath, file.Name, file.Parent.Path, exportParameters.isNewFile);
+                ///to do указывать папку для загрузки
+                uploadedFile = fileHandler.UploadExportFile(exportParameters.tempExportingFilePath, file.Name, this.nameUploadFolder, exportParameters.isNewFile);
                 document.Close(exportParameters.saveChangesInLocalFile);
 
                 if (pathNewFile == null)
