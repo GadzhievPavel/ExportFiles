@@ -2,6 +2,7 @@
 using ExportFiles.Handler;
 using ExportFiles.Handler.CadVariables;
 using ExportFiles.Handler.Exporter;
+using ExportFiles.Handler.Model.API1;
 using NomenclatureExtensionLibray;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using TFlex.DOCs.Model.References;
 using TFlex.DOCs.Model.References.Documents;
 using TFlex.DOCs.Model.References.Files;
 using TFlex.DOCs.Model.References.Nomenclature;
+using TFlex.DOCs.References.Configurations;
 using static ExportFiles.Handler.Exporter.FileExporter;
 
 namespace ExportFiles
@@ -40,20 +42,29 @@ namespace ExportFiles
 
         private StageController stageController;
 
+        private ConfigurationsReference configReference;
+
+        private ConfigReferenceObject config;
+
         protected ControllerVariables controllerVariables;
-        public NomenclatureExport(List<NomenclatureObject> nomenclatures, HashSet<NomenclatureType> types, ServerConnection connection)
-        {
-            this.nomenclatureReference = new NomenclatureReference(connection);
-            this.enabledClassesObjectsNomenclature = types;
-            this.fileObjects = new Dictionary<NomenclatureObject, FileObject>();
 
-            foreach (var nom in nomenclatures)
-            {
-                AddNomenclature(nom);
-            }
+        private readonly string listTypesConfig = "Список guid номенклатуры для формирования tif";
+        //public NomenclatureExport(List<NomenclatureObject> nomenclatures, HashSet<NomenclatureType> types, ServerConnection connection)
+        //{
+        //    this.nomenclatureReference = new NomenclatureReference(connection);
+        //    this.enabledClassesObjectsNomenclature = types;
+        //    this.fileObjects = new Dictionary<NomenclatureObject, FileObject>();
 
-            this.stageController = new StageController(connection);
-        }
+        //    foreach (var nom in nomenclatures)
+        //    {
+        //        AddNomenclature(nom);
+        //    }
+
+        //    this.configReference = new ConfigurationsReference(connection);
+        //    this.stageController = new StageController(connection);
+
+        //    ReadConfigTypesNomenclature(listTypesConfig);
+        //}
 
         public NomenclatureExport(ServerConnection connection, string nameConfig)
         {
@@ -62,9 +73,34 @@ namespace ExportFiles
             this.nomenclatureReference = new NomenclatureReference(connection);
             this.fileObjects = new Dictionary<NomenclatureObject, FileObject> { };
             this.stageController = new StageController(connection);
+
+            ReadConfigTypesNomenclature(listTypesConfig);
+            
         }
 
 
+        private void ReadConfigTypesNomenclature(string nameConfig)
+        {
+            this.config = configReference.FindConfig(nameConfig);
+            var listStrings = new List<string>();
+            listStrings.Add(config["Деталь"].GetValue() as String);
+            listStrings.Add(config["Сборочная единица"].GetValue() as String);
+            listStrings.Add(config["Изделие"].GetValue() as String);
+            listStrings.Add(config["Спецификация"].GetValue() as String);
+            listStrings.Add(config["Комплект"].GetValue() as String);
+            listStrings.Add(config["Комплекс"].GetValue() as String);
+            listStrings.Add(config["Заготовка"].GetValue() as String);
+            listStrings.Add(config["перечень элементов"].GetValue() as String);
+            listStrings.Add(config["Ведомость"].GetValue() as String);
+            listStrings.Add(config["Ведомость покупных изделий"].GetValue() as String);
+            listStrings.Add(config["Ведомость спецификаций"].GetValue() as String);
+            listStrings.Add(config["Ведомость замен"].GetValue() as String);
+
+            foreach(var l in listStrings)
+            {
+                AddEnabledClassObjectNomenclature(l);
+            }
+        }
         /// <summary>
         /// Добавление разрешенного для конвертирования типа номенклатуры
         /// </summary>
@@ -163,7 +199,7 @@ namespace ExportFiles
                 }
                 document.StartUpdate();
                 document.AddFile(newFile);
-                document.EndUpdate($"Добавление подлинника {newFile} в доккумент {document}");
+                document.EndUpdate($"Добавление подлинника {newFile} в документ {document}");
                 if (flag)
                 {
                     stageController.ChangeStage(guidPrevStage, new List<ReferenceObject>() { document });
