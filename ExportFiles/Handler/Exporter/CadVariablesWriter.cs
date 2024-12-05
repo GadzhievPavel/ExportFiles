@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ExportFiles.Exception;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,14 +23,24 @@ namespace ExportFiles.Handler.Exporter
         private bool needSave;
         public CadVariablesWriter(CadDocument cadDocument, DataVariableCad variableCad, bool needSave)
         {
+            if(!cadDocument.IsActive)
+            {
+                throw new ExportFilesException("документ не был открыт в CAD");
+            }
             variables = cadDocument.GetVariables();
             this.variableCad = variableCad;
+            this.needSave = needSave;
         }
         /// <summary>
         /// Метод для записи данных в CAD файл
         /// </summary>
         public void WriteValues()
         {
+            if (!variables.IsActive)
+            {
+                throw new ExportFilesException("документ не был открыт в CAD");
+            }
+            
             foreach (var key in variableCad)
             {
                 var val = variableCad[key];

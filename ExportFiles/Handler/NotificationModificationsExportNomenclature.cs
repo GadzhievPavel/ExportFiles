@@ -56,6 +56,7 @@ namespace ExportFiles.Handler
         /// <param name="isNewFiles"></param>
         public new List<FileObject> Export(string nameConfig)
         {
+            List<FileObject> result = new List<FileObject>();
             foreach (var pair in fileObjects)
             {
                 var fileSource = pair.Value;
@@ -65,8 +66,9 @@ namespace ExportFiles.Handler
                 DataVariables dataVariables = new DataVariables(nomenclature, fileSource, notice);
                 ControllerVariables controllerVariables = new ControllerVariables(dataVariables);
                 fileExporter.setVariable = controllerVariables.GetDataVariableCad;
-                fileExporter.Export();
+                result.Add( fileExporter.Export());
             }
+            return result;
         }
 
 

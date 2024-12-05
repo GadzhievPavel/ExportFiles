@@ -186,6 +186,7 @@ namespace ExportFiles
                 }
                 exportedFile.EndUpdate("save");
             }
+            return exportedFiles;
         }
 
         /// <summary>

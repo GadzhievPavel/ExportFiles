@@ -123,7 +123,7 @@ namespace ExportFiles.Handler.Exporter
         /// <returns></returns>
         public FileObject UploadExportFile(string tempFilePath, string nameNewFile, string parentFolderPath, bool isNewFile)
         {
-            var nameWithExtension = Path.GetFileNameWithoutExtension(nameNewFile);
+            var nameWithExtension = Path.GetFileNameWithoutExtension(nameNewFile).Trim('.');
             var extension = Path.GetExtension(tempFilePath);
 
             string fileName = String.Concat(nameWithExtension, extension);
@@ -207,7 +207,7 @@ namespace ExportFiles.Handler.Exporter
 
             while (filesNameSet.Contains(fileName))
             {
-                fileName = String.Format("{0}_{1}.{2}", name, counter, extension);
+                fileName = String.Format("{0}_{1}{2}", name, counter, extension);
                 counter++;
             }
 
