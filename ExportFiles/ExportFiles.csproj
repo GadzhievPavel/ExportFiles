@@ -62,6 +62,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\InfoExportedFile.cs" />
+    <Compile Include="Data\InfoExportedFiles.cs" />
     <Compile Include="Exception\ExportFilesException.cs" />
     <Compile Include="Exception\FileException\DataVariablesException.cs" />
     <Compile Include="Exception\FileException\FileSizeException.cs" />
