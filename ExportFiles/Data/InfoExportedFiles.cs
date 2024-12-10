@@ -4,19 +4,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TFlex.DOCs.Model;
 using TFlex.DOCs.Model.References.Documents;
 using TFlex.DOCs.Model.References.Files;
 using TFlex.DOCs.Model.References.Nomenclature;
+using TFlex.DOCs.References.TypesNomenclatureForConvertation;
 
 namespace ExportFiles.Data
 {
     public class InfoExportedFiles : IEnumerable<InfoExportedFile>
     {
         private List<InfoExportedFile> infos;
+        private TypesNomenclatureForConvertationReference typesNomenclatureForConvertationReference;
+        private List<TypesNomenclatureForConvertationReferenceObject> types;
 
-        public InfoExportedFiles()
+        public InfoExportedFiles(ServerConnection serverConnection)
         {
             this.infos = new List<InfoExportedFile>();
+            this.typesNomenclatureForConvertationReference = new TypesNomenclatureForConvertationReference(serverConnection);
+            types = new List<TypesNomenclatureForConvertationReferenceObject>();
+            this.types = typesNomenclatureForConvertationReference.Objects.Cast<TypesNomenclatureForConvertationReferenceObject>().ToList();
         }
 
         public IEnumerator<InfoExportedFile> GetEnumerator()
@@ -40,6 +47,11 @@ namespace ExportFiles.Data
         public void Add(InfoExportedFile info)
         {
             infos.Add(info);
+        }
+
+        private bool isEnable(NomenclatureObject nom)
+        {
+            return types.Any(o => o.ClassGuid.Equals(nom.Class.Guid));
         }
     }
 }

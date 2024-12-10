@@ -80,52 +80,68 @@
     <Compile Include="Handler\ExportFilesGrbToTif.cs" />
     <Compile Include="Guids.cs" />
     <Compile Include="Handler\IExport.cs" />
-    <Compile Include="Handler\Model\API1\ArrayReferenceObject.cs" />
-    <Compile Include="Handler\Model\API1\ArrayReferenceObject.designer.cs">
+    <Compile Include="Model\API1\At3BootConfig\ArrayReferenceObject.cs" />
+    <Compile Include="Model\API1\At3BootConfig\ArrayReferenceObject.designer.cs">
       <DependentUpon>ArrayReferenceObject.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Model\API1\BoolReferenceObject.cs" />
-    <Compile Include="Handler\Model\API1\BoolReferenceObject.designer.cs">
+    <Compile Include="Model\API1\At3BootConfig\BoolReferenceObject.cs" />
+    <Compile Include="Model\API1\At3BootConfig\BoolReferenceObject.designer.cs">
       <DependentUpon>BoolReferenceObject.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Model\API1\Config.cs" />
-    <Compile Include="Handler\Model\API1\ConfigReferenceObject.cs" />
-    <Compile Include="Handler\Model\API1\ConfigReferenceObject.designer.cs">
+    <Compile Include="Model\API1\At3BootConfig\Config.cs" />
+    <Compile Include="Model\API1\At3BootConfig\ConfigReferenceObject.cs" />
+    <Compile Include="Model\API1\At3BootConfig\ConfigReferenceObject.designer.cs">
       <DependentUpon>ConfigReferenceObject.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Model\API1\ConfigurationsReference.cs" />
-    <Compile Include="Handler\Model\API1\ConfigurationsReference.designer.cs">
+    <Compile Include="Model\API1\At3BootConfig\ConfigurationsReference.cs" />
+    <Compile Include="Model\API1\At3BootConfig\ConfigurationsReference.designer.cs">
       <DependentUpon>ConfigurationsReference.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Model\API1\ConfigurationsReferenceObject.cs" />
-    <Compile Include="Handler\Model\API1\ConfigurationsReferenceObject.designer.cs">
+    <Compile Include="Model\API1\At3BootConfig\ConfigurationsReferenceObject.cs" />
+    <Compile Include="Model\API1\At3BootConfig\ConfigurationsReferenceObject.designer.cs">
       <DependentUpon>ConfigurationsReferenceObject.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Model\API1\ConfigurationsType.cs" />
-    <Compile Include="Handler\Model\API1\ConfigurationsType.designer.cs">
+    <Compile Include="Model\API1\At3BootConfig\ConfigurationsType.cs" />
+    <Compile Include="Model\API1\At3BootConfig\ConfigurationsType.designer.cs">
       <DependentUpon>ConfigurationsType.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Model\API1\ConfigurationsTypes.cs" />
-    <Compile Include="Handler\Model\API1\ConfigurationsTypes.designer.cs">
+    <Compile Include="Model\API1\At3BootConfig\ConfigurationsTypes.cs" />
+    <Compile Include="Model\API1\At3BootConfig\ConfigurationsTypes.designer.cs">
       <DependentUpon>ConfigurationsTypes.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Model\API1\DataReferenceObject.cs" />
-    <Compile Include="Handler\Model\API1\DataReferenceObject.designer.cs">
+    <Compile Include="Model\API1\At3BootConfig\DataReferenceObject.cs" />
+    <Compile Include="Model\API1\At3BootConfig\DataReferenceObject.designer.cs">
       <DependentUpon>DataReferenceObject.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Model\API1\NumberReferenceObject.cs" />
-    <Compile Include="Handler\Model\API1\NumberReferenceObject.designer.cs">
+    <Compile Include="Model\API1\At3BootConfig\NumberReferenceObject.cs" />
+    <Compile Include="Model\API1\At3BootConfig\NumberReferenceObject.designer.cs">
       <DependentUpon>NumberReferenceObject.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Model\API1\ParameterReferenceObject.cs" />
-    <Compile Include="Handler\Model\API1\ParameterReferenceObject.designer.cs">
+    <Compile Include="Model\API1\At3BootConfig\ParameterReferenceObject.cs" />
+    <Compile Include="Model\API1\At3BootConfig\ParameterReferenceObject.designer.cs">
       <DependentUpon>ParameterReferenceObject.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Model\API1\StringReferenceObject.cs" />
-    <Compile Include="Handler\Model\API1\StringReferenceObject.designer.cs">
+    <Compile Include="Model\API1\At3BootConfig\StringReferenceObject.cs" />
+    <Compile Include="Model\API1\At3BootConfig\StringReferenceObject.designer.cs">
       <DependentUpon>StringReferenceObject.cs</DependentUpon>
     </Compile>
-    <Compile Include="Handler\Model\GroupDrawing.cs" />
+    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationReference.cs" />
+    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationReference.designer.cs">
+      <DependentUpon>TypesNomenclatureForConvertationReference.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationReferenceObject.cs" />
+    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationReferenceObject.designer.cs">
+      <DependentUpon>TypesNomenclatureForConvertationReferenceObject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationType.cs" />
+    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationType.designer.cs">
+      <DependentUpon>TypesNomenclatureForConvertationType.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationTypes.cs" />
+    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationTypes.designer.cs">
+      <DependentUpon>TypesNomenclatureForConvertationTypes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Model\GroupDrawing.cs" />
     <Compile Include="Handler\NotificationModificationsExportNomenclature.cs" />
     <Compile Include="Handler\VariableHandler\FileVariables.cs" />
     <Compile Include="Handler\VariableHandler\ISetterVariable.cs" />
