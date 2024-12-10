@@ -38,7 +38,7 @@
       <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NomenclatureExtensionLibray">
-      <HintPath>..\..\NomenclatureExtensionLibray\NomenclatureExtensionLibray\bin\Debug\NomenclatureExtensionLibray.dll</HintPath>
+      <HintPath>..\..\GadzhievPavel\NomenclatureExtensionLibray\NomenclatureExtensionLibray\bin\Debug\NomenclatureExtensionLibray.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -124,22 +124,6 @@
     <Compile Include="Model\API1\At3BootConfig\StringReferenceObject.cs" />
     <Compile Include="Model\API1\At3BootConfig\StringReferenceObject.designer.cs">
       <DependentUpon>StringReferenceObject.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationReference.cs" />
-    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationReference.designer.cs">
-      <DependentUpon>TypesNomenclatureForConvertationReference.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationReferenceObject.cs" />
-    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationReferenceObject.designer.cs">
-      <DependentUpon>TypesNomenclatureForConvertationReferenceObject.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationType.cs" />
-    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationType.designer.cs">
-      <DependentUpon>TypesNomenclatureForConvertationType.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationTypes.cs" />
-    <Compile Include="Model\API1\TypesNomenclature\TypesNomenclatureForConvertationTypes.designer.cs">
-      <DependentUpon>TypesNomenclatureForConvertationTypes.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\GroupDrawing.cs" />
     <Compile Include="Handler\NotificationModificationsExportNomenclature.cs" />

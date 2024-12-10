@@ -1,1 +1,0 @@
-namespace TFlex.DOCs.References.TypesNomenclatureForConvertation{	using System;	using TFlex.DOCs.Model.References;	using TFlex.DOCs.Model.Structure;	using TFlex.DOCs.Model.Classes;			public partial class TypesNomenclatureForConvertationTypes : SpecialClassTree<TypesNomenclatureForConvertationType>	{	}}
