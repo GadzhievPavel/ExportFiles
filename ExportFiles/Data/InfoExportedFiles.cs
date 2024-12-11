@@ -61,5 +61,12 @@ namespace ExportFiles.Data
         {
             return types.Any(o => o[paramGuidClassNomenclature].Value.Equals(nom.Class.Guid));
         }
+
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
+            types.ForEach(o => { sb.Append($"{o.ToString()} "); });
+            return sb.ToString();
+        }
     }
 }

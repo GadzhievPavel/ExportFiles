@@ -23,5 +23,10 @@ namespace ExportFiles.Data
         /// Список связанной с файлом номенклатуры
         /// </summary>
         public HashSet<EngineeringDocumentObject> linkedDocuments { get; set; }
+
+        public override string ToString()
+        {
+            return $"{file?.ToString()} {nomenclature?.ToString()} {linkedDocuments?.Count}";
+        }
     }
 }
