@@ -68,6 +68,9 @@
     <Compile Include="Exception\FileException\DataVariablesException.cs" />
     <Compile Include="Exception\FileException\FileSizeException.cs" />
     <Compile Include="Exception\FileException\LoadLocalFileException.cs" />
+    <Compile Include="Export\ExportNomenclature.cs" />
+    <Compile Include="Export\ExportNotification.cs" />
+    <Compile Include="Export\TaskConvertionBuilder.cs" />
     <Compile Include="Handler\CadVariables\ControllerVariables.cs" />
     <Compile Include="Handler\CadVariables\DataVariables.cs" />
     <Compile Include="Handler\CadVariables\IControllerVariables.cs" />

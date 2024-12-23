@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NomenclatureExtensionLibray;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,23 +39,54 @@ namespace ExportFiles.Data
             return GetEnumerator();
         }
 
+        public void Add(NomenclatureObject nomenclature)
+        {
+            if (!isEnable(nomenclature))
+            {
+                return;
+            }
+            var file = nomenclature.GetFiles("grb").FirstOrDefault();
+            if(file is null)
+            {
+                return;
+            }
+            var info = new InfoExportedFile() { file = file, nomenclature = nomenclature };
+            var documents = file.GetObjects(EngineeringDocumentFields.File);
+            info.linkedDocuments = new HashSet<EngineeringDocumentObject>(documents.Cast<EngineeringDocumentObject>());
+            infos.Add(info);
+        }
+
         public void Add(FileObject file, NomenclatureObject nomenclature)
         {
-            if (isEnable(nomenclature))
+            if (!isEnable(nomenclature))
             {
-                var info = new InfoExportedFile() { file = file, nomenclature = nomenclature };
-                var documents = file.GetObjects(EngineeringDocumentFields.File);
-                info.linkedDocuments = new HashSet<EngineeringDocumentObject>(documents.Cast<EngineeringDocumentObject>());
-                infos.Add(info);
+                return;
             }
+            var files = nomenclature.GetFiles("grb");
+            if (files is null)
+            {
+                return;
+            }
+            var info = new InfoExportedFile() { file = file, nomenclature = nomenclature };
+            var documents = file.GetObjects(EngineeringDocumentFields.File);
+            info.linkedDocuments = new HashSet<EngineeringDocumentObject>(documents.Cast<EngineeringDocumentObject>());
+            infos.Add(info);
+
         }
 
         public void Add(InfoExportedFile info)
         {
-            if (isEnable(info.nomenclature))
+            if (!isEnable(info.nomenclature))
             {
-                infos.Add(info);
+                return;
             }
+            var files = info.nomenclature.GetFiles("grb");
+            if (files is null)
+            {
+                return;
+            }
+            infos.Add(info);
+
         }
 
         private bool isEnable(NomenclatureObject nom)
