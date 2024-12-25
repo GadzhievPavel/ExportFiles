@@ -56,7 +56,7 @@ namespace ExportFiles.Export
             this.queueReference = taskConvertion.Reference;
             this.connection = taskConvertion.Reference.Connection;
             this.fileConversionModuleReference = new FileConversionModuleReference(connection);
-            this.formatConvertationReference = new FileConversionModuleReference(connection);
+            this.formatConvertationReference = connection.ReferenceCatalog.Find(new Guid("e22c48f1-0823-4567-9280-b705e7572645")).CreateReference();
         }
 
         public void Save(string str)
@@ -131,6 +131,7 @@ namespace ExportFiles.Export
             this.task[Guids.Parameters.nameOutputFile].Value = Path.GetFileNameWithoutExtension(sourceFile.Name);
             this.task[Guids.Parameters.nomenclature].Value = nomenclatureObject.Guid;
             this.task[Guids.Parameters.connectionFileToNomenclature].Value = connectFileToNomenclature;
+            this.task.SetLinkedObject(Guids.Links.ModuleConversionFile, module);
             return this.task;
         }
     }
