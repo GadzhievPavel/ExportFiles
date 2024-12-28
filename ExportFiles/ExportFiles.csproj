@@ -71,18 +71,9 @@
     <Compile Include="Export\ExportNomenclature.cs" />
     <Compile Include="Export\ExportNotification.cs" />
     <Compile Include="Export\TaskConvertionBuilder.cs" />
-    <Compile Include="Handler\CadVariables\ControllerVariables.cs" />
-    <Compile Include="Handler\CadVariables\DataVariables.cs" />
-    <Compile Include="Handler\CadVariables\IControllerVariables.cs" />
     <Compile Include="Handler\Exporter\CadVariable.cs" />
-    <Compile Include="Handler\Exporter\DataVariableCad.cs" />
-    <Compile Include="Handler\Exporter\ExportParams.cs" />
-    <Compile Include="Handler\Exporter\FileExporter.cs" />
-    <Compile Include="Handler\Exporter\FileHandler.cs" />
-    <Compile Include="Handler\Exporter\CadVariablesWriter.cs" />
     <Compile Include="Handler\ExportFilesGrbToTif.cs" />
     <Compile Include="Guids.cs" />
-    <Compile Include="Handler\IExport.cs" />
     <Compile Include="Model\API1\At3BootConfig\ArrayReferenceObject.cs" />
     <Compile Include="Model\API1\At3BootConfig\ArrayReferenceObject.designer.cs">
       <DependentUpon>ArrayReferenceObject.cs</DependentUpon>
@@ -129,10 +120,8 @@
       <DependentUpon>StringReferenceObject.cs</DependentUpon>
     </Compile>
     <Compile Include="Model\GroupDrawing.cs" />
-    <Compile Include="Handler\NotificationModificationsExportNomenclature.cs" />
     <Compile Include="Handler\VariableHandler\FileVariables.cs" />
     <Compile Include="Handler\VariableHandler\ISetterVariable.cs" />
-    <Compile Include="Handler\NomenclatureExport.cs" />
     <Compile Include="Handler\VariableHandler\NomenclatureSetterVariables.cs" />
     <Compile Include="Handler\VariableHandler\SetVariablesFile.cs" />
     <Compile Include="LibraryPlugin.cs" />
@@ -150,6 +139,8 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Handler\CadVariables\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
