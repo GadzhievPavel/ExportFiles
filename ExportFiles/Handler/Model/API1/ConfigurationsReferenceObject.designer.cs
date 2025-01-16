@@ -72,5 +72,13 @@ namespace TFlex.DOCs.References.Configurations
 		   public static readonly Guid ValueDouble = new Guid("c32bf299-3c17-4835-8bf6-dd9c42c387e3");
 
 		}
+
+		public class RelationsLink
+		{
+			/// <summary>
+			/// Представляет уникальный идентификатор для связи на любой объект
+			/// </summary>
+			public static readonly Guid RefObject = new Guid("abf29a73-7e0d-4fc2-b090-512dbc564d7f");
+		}
 	}
 }

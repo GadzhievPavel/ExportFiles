@@ -62,12 +62,20 @@ namespace ExportFiles.Handler
                 var fileSource = pair.Value;
                 var nomenclature = pair.Key;
                 this.fileExporter.SetFile(fileSource);
-                this.fileExporter.SetSettings(nameConfig);
+                var exportParams = this.fileExporter.SetSettings(nameConfig);
                 DataVariables dataVariables = new DataVariables(nomenclature, fileSource, notice);
                 ControllerVariables controllerVariables = new ControllerVariables(dataVariables);
                 fileExporter.setVariable = controllerVariables.GetDataVariableCad;
-                result.Add( fileExporter.Export());
+                var exportedFile = fileExporter.Export();
+                exportedFile.EndUpdate("save");
+                result.Add(exportedFile);
+
+                if (exportParams.isNewFile)
+                {
+                    addAllLinkedNomenclature(exportedFile, fileSource);
+                }
             }
+
             return result;
         }
 

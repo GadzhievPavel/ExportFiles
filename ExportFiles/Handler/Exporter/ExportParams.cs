@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TFlex.DOCs.Model.References.Files;
 using TFlex.DOCs.References.Configurations;
 
 namespace ExportFiles.Handler.Exporter
@@ -58,6 +59,8 @@ namespace ExportFiles.Handler.Exporter
         /// Путь папки в которую требуется загружать экспортированный файл 
         /// </summary>
         public string pathUploadFolder;
+
+        public FolderObject uploadFolder;
 
         public override string ToString()
         {

@@ -113,5 +113,13 @@ namespace TFlex.DOCs.References.Configurations
 				return IsInherit(ConfigurationsTypes.Keys.Config);
 			}
 		}
+
+		public bool IsRef
+		{
+			get
+			{
+				return IsInherit(ConfigurationsTypes.Keys.RefObj);
+			}
+		}
 	}
 }

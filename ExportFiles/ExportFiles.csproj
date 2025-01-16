@@ -119,6 +119,7 @@
     <Compile Include="Handler\Model\API1\ParameterReferenceObject.designer.cs">
       <DependentUpon>ParameterReferenceObject.cs</DependentUpon>
     </Compile>
+    <Compile Include="Handler\Model\API1\RefReferenceObject.cs" />
     <Compile Include="Handler\Model\API1\StringReferenceObject.cs" />
     <Compile Include="Handler\Model\API1\StringReferenceObject.designer.cs">
       <DependentUpon>StringReferenceObject.cs</DependentUpon>
