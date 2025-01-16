@@ -17,6 +17,7 @@ using ExportFiles.Handler.Model;
 using TFlex.DOCs.Model.References.Users;
 using ExportFiles.Handler.Exporter;
 using NomenclatureExtensionLibray;
+using TFlex.DOCs.Model.References.Materials;
 
 namespace ExportFiles.Handler.CadVariables
 {
@@ -117,12 +118,34 @@ namespace ExportFiles.Handler.CadVariables
             {
                 return dataCad;
             }
-
-            dataCad.Add("$Материал2", material[Guids.MaterialReference.Parameter.СводноеНаименование].GetString());
+            var materialObject = material as MaterialReferenceObject;
+            if (haveComboDenotation(materialObject))
+            {
+                dataCad.Add("$Материал2", materialObject.Denotation1);
+                dataCad.Add("$Материал3", materialObject.Denotation2);
+                dataCad.Add("$Материал4", materialObject.Denotation3);
+            }
+            else
+            {
+                dataCad.Add("$Материал2", materialObject[Guids.MaterialReference.Parameter.СводноеНаименование]);
+            }
 
             return dataCad;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="material"></param>
+        /// <returns></returns>
+        private bool haveComboDenotation(MaterialReferenceObject material)
+        {
+            if(material.Denotation1.IsNull || material.Denotation2.IsNull || material.Denotation3.IsNull)
+            {
+                return true;
+            }
+            return false;
+        }
         public DataVariableCad GetDataVariableCad()
         {
             var dataCad = new DataVariableCad();
