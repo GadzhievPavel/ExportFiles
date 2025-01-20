@@ -76,6 +76,9 @@ namespace ExportFiles.Handler.Exporter
             if (exportParameters.pathUploadFolder is null)
             {
                 this.nameUploadFolder = this.file.Parent.Path;
+            }else if(exportParameters.isNewFile)
+            {
+                this.nameUploadFolder = this.file.Parent.Path;
             }
             else
             {

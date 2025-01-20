@@ -67,13 +67,14 @@ namespace ExportFiles.Handler
                 ControllerVariables controllerVariables = new ControllerVariables(dataVariables);
                 fileExporter.setVariable = controllerVariables.GetDataVariableCad;
                 var exportedFile = fileExporter.Export();
-                exportedFile.EndUpdate("save");
                 result.Add(exportedFile);
 
                 if (exportParams.isNewFile)
                 {
                     addAllLinkedNomenclature(exportedFile, fileSource);
                 }
+
+                exportedFile.EndUpdate("save");
             }
 
             return result;
