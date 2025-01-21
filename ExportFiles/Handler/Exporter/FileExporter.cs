@@ -144,7 +144,7 @@ namespace ExportFiles.Handler.Exporter
                         "Файл '{1}' не может быть открыт", Environment.NewLine, file.Name));
                 }
 
-                if (setVariable != null && data != null)
+                if (setVariable != null)
                 {
                     var dataCad = setVariable();
                     new CadVariablesWriter(document, dataCad, exportParameters.saveChangesInLocalFile).WriteValues();
