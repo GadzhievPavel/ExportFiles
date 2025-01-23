@@ -247,7 +247,12 @@ namespace ExportFiles.Handler.Exporter
 
             File.Delete(path);
         }
-
+        /// <summary>
+        /// Удаление аттрибутов на файле
+        /// </summary>
+        /// <param name="attributes"></param>
+        /// <param name="attributesToRemove"></param>
+        /// <returns></returns>
         private FileAttributes RemoveAttribute(FileAttributes attributes, FileAttributes attributesToRemove)
         {
             return attributes & ~attributesToRemove;

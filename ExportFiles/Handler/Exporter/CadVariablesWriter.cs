@@ -10,6 +10,9 @@ using TFlex.DOCs.Model.References.Nomenclature;
 
 namespace ExportFiles.Handler.Exporter
 {
+    /// <summary>
+    /// Класс для записи данных в переменные CAD
+    /// </summary>
     public class CadVariablesWriter
     {
         /// <summary>
@@ -20,6 +23,9 @@ namespace ExportFiles.Handler.Exporter
         /// Набор переменных для записи данных в CAD модель
         /// </summary>
         private DataVariableCad variableCad;
+        /// <summary>
+        /// Необходимо сохранить локальный файл?
+        /// </summary>
         private bool needSave;
         public CadVariablesWriter(CadDocument cadDocument, DataVariableCad variableCad, bool needSave)
         {

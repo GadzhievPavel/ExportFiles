@@ -20,6 +20,7 @@ using static ExportFiles.Handler.Exporter.FileExporter;
 
 namespace ExportFiles
 {
+    ///Базовый класс для экспорта номенклатуры
     public class NomenclatureExport : IExport
     {
         /// <summary>
@@ -39,13 +40,21 @@ namespace ExportFiles
         /// Набор пар номенклатура-файл
         /// </summary>
         protected Dictionary<NomenclatureObject, FileObject> fileObjects;
-
+        /// <summary>
+        /// Класс для управления стадиями объектов
+        /// </summary>
         private StageController stageController;
-
+        /// <summary>
+        /// Справочник "Конфигурационный справочник"
+        /// </summary>
         private ConfigurationsReference configReference;
-
+        /// <summary>
+        /// Конфигурация для экспорта
+        /// </summary>
         private Config config;
-
+        /// <summary>
+        /// Класс для управления значениями переменных в grb
+        /// </summary>
         protected ControllerVariables controllerVariables;
 
         private readonly string listTypesConfig = "Список guid номенклатуры для формирования tif";
@@ -78,7 +87,10 @@ namespace ExportFiles
             
         }
 
-
+        /// <summary>
+        /// Метод для чтения конфигурации из справочника "Конфигурационный справочник"
+        /// </summary>
+        /// <param name="nameConfig"></param>
         private void ReadConfigTypesNomenclature(string nameConfig)
         {
             config = configReference.FindConfig(nameConfig).getParameters();
@@ -165,6 +177,11 @@ namespace ExportFiles
             return enabledClassesObjectsNomenclature.Contains(nomenclature.Class);
         }
 
+        /// <summary>
+        /// Метод, выполняющий конвертацию grb
+        /// </summary>
+        /// <param name="nameConfig"></param>
+        /// <returns></returns>
         public List<FileObject> Export(string nameConfig)
         {
             var exportedFiles = new List<FileObject>();
@@ -219,6 +236,10 @@ namespace ExportFiles
             }
         }
 
+        /// <summary>
+        /// Возвращает всю номенклатуру, на которую будет произведена конвертация
+        /// </summary>
+        /// <returns></returns>
         public List<NomenclatureObject> GetNomenclatures()
         {
             return this.fileObjects.Keys.ToList();

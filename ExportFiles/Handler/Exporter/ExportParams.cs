@@ -9,6 +9,9 @@ using TFlex.DOCs.References.Configurations;
 
 namespace ExportFiles.Handler.Exporter
 {
+    /// <summary>
+    /// Класс с набором конфигурационных параметров для экспорта
+    /// </summary>
     public class ExportParams
     {
         public ExportParams(Config config)

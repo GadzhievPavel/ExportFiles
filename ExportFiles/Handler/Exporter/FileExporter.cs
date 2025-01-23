@@ -18,7 +18,9 @@ using TFlex.DOCs.References.Configurations;
 
 namespace ExportFiles.Handler.Exporter
 {
-
+    /// <summary>
+    /// Класс для экспорта grb файла в tif
+    /// </summary>
     public class FileExporter
     {
         /// <summary>
@@ -39,16 +41,26 @@ namespace ExportFiles.Handler.Exporter
         /// провайдер для работы с CAD документом T-FLEX
         /// </summary>
         private CadDocumentProvider provider;
-
+        /// <summary>
+        /// Обработчик файлов, выполяет скачивание и загрузку файла
+        /// </summary>
         private FileHandler fileHandler;
 
         private DataVariables data;
-
+        /// <summary>
+        /// делегат принимабщий логику записи данных в переменные grb файла
+        /// </summary>
+        /// <returns></returns>
         public delegate DataVariableCad SetVariable();
-
+        /// <summary>
+        /// Экземпляр делегата
+        /// </summary>
         public SetVariable setVariable;
-
+        /// <summary>
+        /// Путь папаки для загрузки экспортированного файла
+        /// </summary>
         private string nameUploadFolder;
+
         public FileExporter(ServerConnection connection)
         {
             this.connection = connection;
@@ -180,7 +192,11 @@ namespace ExportFiles.Handler.Exporter
             return uploadedFile;
         }
 
-
+        /// <summary>
+        /// Возвращает CAD контекст для экспорта
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
         private ExportContext GetExportContext(CadDocument document)
         {
             var exportContext = new ExportContext(exportParameters.tempExportingFilePath);
@@ -193,7 +209,12 @@ namespace ExportFiles.Handler.Exporter
             exportContext.Pages.AddRange(selectPage.Select(sp => sp.Index));
             return exportContext;
         }
-
+        /// <summary>
+        /// Выбираем страницы для экспорта
+        /// </summary>
+        /// <param name="flexPages"></param>
+        /// <param name="exportParams"></param>
+        /// <returns></returns>
         private HashSet<TFlexPageInfo> selectPages(TFlexPageInfo[] flexPages, ExportParams exportParams)
         {
             var pages = new HashSet<TFlexPageInfo>();

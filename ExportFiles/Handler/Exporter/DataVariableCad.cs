@@ -8,6 +8,9 @@ using TFlex.DOCs.Model.References.Files;
 
 namespace ExportFiles.Handler.Exporter
 {
+    /// <summary>
+    /// Коллекция переменных для записи в grb
+    /// </summary>
     public class DataVariableCad : IEnumerable<string>
     {
         private Dictionary<string, object> data;

@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace ExportFiles.Handler.Exporter
 {
+    /// <summary>
+    /// Предстовление переменной в КАД
+    /// </summary>
     public class CadVariable
     {
         public string Key { get; set; }

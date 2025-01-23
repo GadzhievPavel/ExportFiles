@@ -16,7 +16,7 @@ namespace ExportFiles.Handler.VariableHandler
         /// <summary>
         /// Устанавливаем значение в переменную
         /// </summary>
-        /// <param name="varribles"></param>
+        /// <param name="varribles">Коллекция переменных в grb файле</param>
         /// <param name="varribleName"></param>
         /// <param name="value"></param>
         /// <returns></returns>

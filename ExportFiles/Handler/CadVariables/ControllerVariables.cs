@@ -33,7 +33,12 @@ namespace ExportFiles.Handler.CadVariables
         {
             this.data = data;
         }
-
+        /// <summary>
+        /// Устанавливает подписи в основную надпись
+        /// </summary>
+        /// <param name="dataCad">набор переменных, для записи в grb файл</param>
+        /// <param name="signatures">коллекция поставленных в DOCs подписей</param>
+        /// <returns></returns>
         private DataVariableCad MakeSignatures(ref DataVariableCad dataCad, SignatureCollection signatures)
         {
             SignaturaVariable(ref dataCad, signatures, 3, "$Разработал", "$Дата_разраб");
@@ -43,7 +48,15 @@ namespace ExportFiles.Handler.CadVariables
             SignaturaVariable(ref dataCad, signatures, 5, "$Т_контр", "$Дата_т_контр");
             return dataCad;
         }
-
+        /// <summary>
+        /// Установка задание значений для подписей в основной надписи
+        /// </summary>
+        /// <param name="dataCad">Коллекция переменных для записи в кад</param>
+        /// <param name="signatures">коллекция подписей</param>
+        /// <param name="id">id типа подписи</param>
+        /// <param name="varShortName">короткое имя пользователя</param>
+        /// <param name="varDate">дата подписи</param>
+        /// <returns></returns>
         private DataVariableCad SignaturaVariable(ref DataVariableCad dataCad, SignatureCollection signatures, int id, string varShortName, string varDate)
         {
             var signature = signatures.FirstOrDefault(s => s.SignatureObjectType.Id == id);
@@ -59,7 +72,11 @@ namespace ExportFiles.Handler.CadVariables
             dataCad.Add(new CadVariable { Key = varDate, Value = date });
             return dataCad;
         }
-
+        /// <summary>
+        /// Установка в основную надпись переменных связанных с ИИ
+        /// </summary>
+        /// <param name="dataCad"></param>
+        /// <returns></returns>
         private DataVariableCad NotificationVariable(ref DataVariableCad dataCad)
         {
             dataCad.Add("$ii", data.notice[Guids.NoticeModificationReference.Parameter.ОбозначениеИзвещенияОбИзменения].GetString());
@@ -84,7 +101,11 @@ namespace ExportFiles.Handler.CadVariables
             }
             return dataCad;
         }
-
+        /// <summary>
+        /// Установка значений в основную надпись
+        /// </summary>
+        /// <param name="dataCad"></param>
+        /// <returns></returns>
         private DataVariableCad SetBaseInfoVariables(ref DataVariableCad dataCad)
         {
             if (data.GetNomenclature().Class.IsAssembly)
@@ -134,7 +155,7 @@ namespace ExportFiles.Handler.CadVariables
         }
 
         /// <summary>
-        /// 
+        /// Есть комбинированное название у материала или нет
         /// </summary>
         /// <param name="material"></param>
         /// <returns></returns>
@@ -146,6 +167,10 @@ namespace ExportFiles.Handler.CadVariables
             }
             return false;
         }
+        /// <summary>
+        /// Формирование коллекции переменных для записи в CAD
+        /// </summary>
+        /// <returns></returns>
         public DataVariableCad GetDataVariableCad()
         {
             var dataCad = new DataVariableCad();
