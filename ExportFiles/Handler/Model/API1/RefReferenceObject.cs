@@ -13,6 +13,9 @@ namespace ExportFiles.Handler.Model.API1
     {
         internal RefReferenceObject(ConfigurationsReference reference) : base(reference) { }
 
+        /// <summary>
+        /// Возвращает объект на который ведет связь
+        /// </summary>
         public ReferenceObject RefObject
         {
             get

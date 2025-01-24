@@ -137,6 +137,7 @@
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="docs\configApi.md" />
     <None Include="docs\Configs.md" />
     <None Include="docs\ExportNotify.md" />
     <None Include="docs\index.md" />
@@ -148,5 +149,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <Content Include="docs\img\refConfig.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

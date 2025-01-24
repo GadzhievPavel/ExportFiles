@@ -9,6 +9,10 @@ namespace TFlex.DOCs.References.Configurations{
 
     public partial class DataReferenceObject : ConfigurationsReferenceObject
     {
+        /// <summary>
+        /// динамически возвращает параметры в соответствующем виде
+        /// </summary>
+        /// <returns></returns>
         public dynamic GetValue()
         {
             if (this.Class.IsArray)

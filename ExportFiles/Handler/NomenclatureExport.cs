@@ -49,7 +49,7 @@ namespace ExportFiles
         /// </summary>
         private ConfigurationsReference configReference;
         /// <summary>
-        /// Конфигурация для экспорта
+        /// Конфигурация для экспорта. Объект справочника "Конфигурационный справочник"
         /// </summary>
         private Config config;
         /// <summary>
@@ -58,22 +58,6 @@ namespace ExportFiles
         protected ControllerVariables controllerVariables;
 
         private readonly string listTypesConfig = "Список guid номенклатуры для формирования tif";
-        //public NomenclatureExport(List<NomenclatureObject> nomenclatures, HashSet<NomenclatureType> types, ServerConnection connection)
-        //{
-        //    this.nomenclatureReference = new NomenclatureReference(connection);
-        //    this.enabledClassesObjectsNomenclature = types;
-        //    this.fileObjects = new Dictionary<NomenclatureObject, FileObject>();
-
-        //    foreach (var nom in nomenclatures)
-        //    {
-        //        AddNomenclature(nom);
-        //    }
-
-        //    this.configReference = new ConfigurationsReference(connection);
-        //    this.stageController = new StageController(connection);
-
-        //    ReadConfigTypesNomenclature(listTypesConfig);
-        //}
 
         public NomenclatureExport(ServerConnection connection)
         {

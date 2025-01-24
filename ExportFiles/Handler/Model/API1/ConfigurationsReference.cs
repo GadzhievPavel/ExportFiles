@@ -1,4 +1,5 @@
-namespace TFlex.DOCs.References.Configurations{
+namespace TFlex.DOCs.References.Configurations
+{
     using System;
     using TFlex.DOCs.Model.References;
     using TFlex.DOCs.Model.Structure;
@@ -18,5 +19,11 @@ namespace TFlex.DOCs.References.Configurations{
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public ConfigReferenceObject FindConfig(string name)        {            return Find(                Filter.Parse($"[Наименование] = '{name}' И [Тип] = 'Конфигурация'",                this.ParameterGroup)).FirstOrDefault() as ConfigReferenceObject;        }
-    }}
+        public ConfigReferenceObject FindConfig(string name)
+        {
+            return Find(
+                Filter.Parse($"[Наименование] = '{name}' И [Тип] = 'Конфигурация'",
+                this.ParameterGroup)).FirstOrDefault() as ConfigReferenceObject;
+        }
+    }
+}
